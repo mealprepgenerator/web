@@ -1,0 +1,9 @@
+.recipe-collector {
+  display: flex;
+  width: 50em;
+  margin: 0 auto;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
