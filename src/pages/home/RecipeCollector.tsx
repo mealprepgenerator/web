@@ -18,6 +18,7 @@ import "./RecipeCollector.css";
 
 export interface RecipeCollectorState {
   error: string | null;
+  isSaving: boolean;
   recipes: api.RecipeData[];
   savedMealPlan: string | null;
 }
@@ -25,6 +26,7 @@ export interface RecipeCollectorState {
 export default class RecipeCollector extends React.Component {
   public state: RecipeCollectorState = {
     error: null,
+    isSaving: false,
     recipes: [],
     savedMealPlan: null,
   };
@@ -86,9 +88,14 @@ export default class RecipeCollector extends React.Component {
   }
 
   public onSave = async () => {
+    this.setState({
+      isSaving: true,
+    });
+
     const mealPlan = await api.saveMealPlan(this.state.recipes);
 
     this.setState({
+      isSaving: false,
       savedMealPlan: `${apiUrl}/${mealPlan.id}`,
     });
 
@@ -142,7 +149,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public render() {
-    const {error, savedMealPlan} = this.state;
+    const {error, isSaving, savedMealPlan} = this.state;
 
     return (
       <Box className="recipe-collector">
@@ -152,7 +159,9 @@ export default class RecipeCollector extends React.Component {
         <AddRecipe onAdd={this.onAdd} />
         <Columns isMobile={true}>
           <Column isSize="narrow">
-            <Button onClick={this.onSave}>Save</Button>
+            <Button onClick={this.onSave} isLoading={isSaving}>
+              Save
+            </Button>
           </Column>
           <Column isSize="narrow">
             <Button onClick={this.onCheckout}>Checkout</Button>
