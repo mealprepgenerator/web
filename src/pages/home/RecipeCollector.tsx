@@ -5,8 +5,6 @@ import {
   Button,
   Column,
   Columns,
-  Container,
-  Notification,
 } from "bloomer";
 
 import { apiUrl } from "../../config";
