@@ -23,8 +23,8 @@ class AddRecipe extends React.Component<AddRecipeProps, AddRecipeState> {
 
   public render() {
     return (
-      <Columns isMobile={true}>
-        <Column isSize="2/3">
+      <Columns isMobile={true} isVCentered={true}>
+        <Column isSize={{ mobile: "1/2", desktop: "2/3"}}>
           <Input
             type="text"
             onChange={this.onChange}

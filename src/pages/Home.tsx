@@ -1,15 +1,13 @@
 import * as React from "react";
 
-import { Container } from "bloomer";
+import { Section } from "bloomer";
 
 import RecipeCollector from "./home/RecipeCollector";
 
-import "./Home.css";
-
 const Home: React.SFC = () => (
-  <Container className="home">
+  <Section>
     <RecipeCollector />
-  </Container>
+  </Section>
 );
 
 export default Home;
