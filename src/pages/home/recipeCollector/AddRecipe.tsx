@@ -8,10 +8,12 @@ export interface AddRecipeProps {
 
 export interface AddRecipeState {
   recipeUrl: string;
+  isLoading: boolean;
 }
 
 class AddRecipe extends React.Component<AddRecipeProps, AddRecipeState> {
   public state: AddRecipeState = {
+    isLoading: false,
     recipeUrl: "",
   };
 
@@ -19,8 +21,9 @@ class AddRecipe extends React.Component<AddRecipeProps, AddRecipeState> {
     this.setState({recipeUrl: e.target.value})
 
   public onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    this.setState({isLoading: true});
     await this.props.onAdd(this.state.recipeUrl);
-    this.setState({recipeUrl: ""});
+    this.setState({isLoading: false, recipeUrl: ""});
   }
 
   public render() {
@@ -35,7 +38,7 @@ class AddRecipe extends React.Component<AddRecipeProps, AddRecipeState> {
           />
         </Column>
         <Column>
-          <Button onClick={this.onClick}>
+          <Button onClick={this.onClick} isLoading={this.state.isLoading}>
             Add Recipe
           </Button>
         </Column>
