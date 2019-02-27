@@ -1,10 +1,8 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import "bulma/css/bulma.css";
+import * as React from "react";
+import * as ReactDom from "react-dom";
+
 import App from "./App";
 
-import "bulma/css/bulma.css";
-
-ReactDOM.render(
-  <App />,
-  document.getElementById("root"),
-);
+const container = document.getElementById("root");
+ReactDom.render(<App />, container);
