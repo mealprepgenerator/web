@@ -5,6 +5,8 @@ import {
   Button,
   Column,
   Columns,
+  Delete,
+  Notification,
 } from "bloomer";
 
 import { apiUrl } from "../../config";
@@ -53,6 +55,9 @@ export default class RecipeCollector extends React.Component {
     });
   }
 
+  public onHideNotification = () =>
+    this.setState({ error: null })
+
   public onCheckout = () => {
     whisk.queue.push(() => {
       whisk.shoppingList.addProductsToBasket({
@@ -88,18 +93,19 @@ export default class RecipeCollector extends React.Component {
   }
 
   public onSave = async () => {
-    this.setState({
-      isSaving: true,
-    });
+    try {
+      this.setState({error: null, isSaving: true});
+      const mealPlan = await api.saveMealPlan(this.state.recipes);
 
-    const mealPlan = await api.saveMealPlan(this.state.recipes);
+      this.setState({
+        isSaving: false,
+        savedMealPlan: `${apiUrl}/${mealPlan.id}`,
+      });
 
-    this.setState({
-      isSaving: false,
-      savedMealPlan: `${apiUrl}/${mealPlan.id}`,
-    });
-
-    history.replaceState({}, "Meal Plan Generator", mealPlan.id.toString());
+      history.replaceState({}, "Meal Plan Generator", mealPlan.id.toString());
+    } catch (err) {
+      this.setState({error: err.message, isSaving: false});
+    }
   }
 
   public onAdd = async (recipeUrl: string) => {
@@ -121,6 +127,20 @@ export default class RecipeCollector extends React.Component {
     } catch (err) {
       this.setState({error: err.message});
     }
+  }
+
+  public renderNotification() {
+    const {error} = this.state;
+    if (!error) {
+      return null;
+    }
+
+    return (
+      <Notification isColor="danger">
+        <Delete onClick={this.onHideNotification} />
+        {error}
+      </Notification>
+    );
   }
 
   public renderNutrition() {
@@ -149,22 +169,32 @@ export default class RecipeCollector extends React.Component {
   }
 
   public render() {
-    const {error, isSaving, savedMealPlan} = this.state;
+    const {isSaving, savedMealPlan, recipes} = this.state;
+    const noRecipes = recipes.length === 0;
 
     return (
       <Box className="recipe-collector">
-        {error && <p>{error}</p>}
+        {this.renderNotification()}
         {this.renderNutrition()}
         {this.renderRecipes()}
         <AddRecipe onAdd={this.onAdd} />
         <Columns isMobile={true}>
           <Column isSize="narrow">
-            <Button onClick={this.onSave} isLoading={isSaving}>
+            <Button
+              onClick={this.onSave}
+              disabled={noRecipes}
+              isLoading={isSaving}
+            >
               Save
             </Button>
           </Column>
           <Column isSize="narrow">
-            <Button onClick={this.onCheckout}>Checkout</Button>
+            <Button
+              onClick={this.onCheckout}
+              disabled={noRecipes}
+            >
+              Checkout
+            </Button>
           </Column>
         </Columns>
         {savedMealPlan && <p>Meal Plan URL: {savedMealPlan}</p>}
