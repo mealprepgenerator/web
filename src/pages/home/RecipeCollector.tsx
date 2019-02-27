@@ -9,6 +9,7 @@ import {
 
 import { apiUrl } from "../../config";
 import AddRecipe from "./recipeCollector/AddRecipe";
+import Nutrition from "./recipeCollector/Nutrition";
 import Recipe, { RecipeData } from "./recipeCollector/Recipe";
 import { scaleRecipe } from "./recipeCollector/recipe/utils";
 
@@ -130,24 +131,7 @@ export default class RecipeCollector extends React.Component {
       return null;
     }
 
-    const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
-    const totalFat = recipes.map((r) => r.nutrition.perWeight.FAT.quantity);
-    const totalCarbs = recipes.map((r) => r.nutrition.perWeight.CHOCDF.quantity);
-    const totalProtein = recipes.map((r) => r.nutrition.perWeight.PROCNT.quantity);
-
-    return (
-      <Columns isMobile={true}>
-        <Column>
-          <p>Fat: {sum(totalFat).toFixed(2)}g</p>
-        </Column>
-        <Column>
-          <p>Carbs: {sum(totalCarbs).toFixed(2)}g</p>
-        </Column>
-        <Column>
-          <p>Protein: {sum(totalProtein).toFixed(2)}g</p>
-        </Column>
-      </Columns>
-    );
+    return <Nutrition recipes={recipes} />;
   }
 
   public renderRecipes() {
@@ -167,7 +151,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public render() {
-    const {error} = this.state;
+    const {error, savedMealPlan} = this.state;
 
     return (
       <Box className="recipe-collector">
@@ -183,7 +167,7 @@ export default class RecipeCollector extends React.Component {
             <Button onClick={this.onCheckout}>Checkout</Button>
           </Column>
         </Columns>
-        {this.state.savedMealPlan && <p>Meal Plan URL: {this.state.savedMealPlan}</p>}
+        {savedMealPlan && <p>Meal Plan URL: {savedMealPlan}</p>}
       </Box>
     );
   }
