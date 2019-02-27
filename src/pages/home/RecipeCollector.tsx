@@ -8,26 +8,17 @@ import {
 } from "bloomer";
 
 import { apiUrl } from "../../config";
+import * as api from "../../services/api";
 import AddRecipe from "./recipeCollector/AddRecipe";
 import Nutrition from "./recipeCollector/Nutrition";
-import Recipe, { RecipeData } from "./recipeCollector/Recipe";
+import Recipe from "./recipeCollector/Recipe";
 import { scaleRecipe } from "./recipeCollector/recipe/utils";
 
 import "./RecipeCollector.css";
 
-export interface MealPlanData {
-  id: number;
-  recipes: MealPlanRecipe[];
-}
-
-export interface MealPlanRecipe {
-  servings: number;
-  recipeUrl: string;
-}
-
 export interface RecipeCollectorState {
   error: string | null;
-  recipes: RecipeData[];
+  recipes: api.RecipeData[];
   savedMealPlan: string | null;
 }
 
@@ -44,7 +35,7 @@ export default class RecipeCollector extends React.Component {
     }
 
     const planId = location.pathname.substring(1);
-    const mealPlan = await showMealPlan(planId);
+    const mealPlan = await api.showMealPlan(planId);
 
     if (!mealPlan) {
       return history.replaceState({}, "Meal Plan Generator", "/");
@@ -53,7 +44,7 @@ export default class RecipeCollector extends React.Component {
     this.setState({
       recipes: await Promise.all(
         mealPlan.recipes.map(async (r: any) => {
-          const fullRecipe = await analyzeRecipe(r.recipeUrl);
+          const fullRecipe = await api.analyzeRecipe(r.recipeUrl);
           return scaleRecipe(fullRecipe, r.servings / fullRecipe.servings);
         }),
       ),
@@ -70,7 +61,7 @@ export default class RecipeCollector extends React.Component {
     });
   }
 
-  public onChange = (recipe: RecipeData) => {
+  public onChange = (recipe: api.RecipeData) => {
     const {recipes} = this.state;
 
     const index = recipes.findIndex((r) => r.name === recipe.name);
@@ -82,7 +73,7 @@ export default class RecipeCollector extends React.Component {
     });
   }
 
-  public onRemove = (recipe: RecipeData) => {
+  public onRemove = (recipe: api.RecipeData) => {
     const {recipes} = this.state;
 
     const index = recipes.findIndex((r) => r.name === recipe.name);
@@ -95,7 +86,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public onSave = async () => {
-    const mealPlan = await saveMealPlan(this.state.recipes);
+    const mealPlan = await api.saveMealPlan(this.state.recipes);
 
     this.setState({
       savedMealPlan: `${apiUrl}/${mealPlan.id}`,
@@ -112,7 +103,7 @@ export default class RecipeCollector extends React.Component {
 
     try {
       this.setState({error: null});
-      const recipe = await analyzeRecipe(recipeUrl);
+      const recipe = await api.analyzeRecipe(recipeUrl);
 
       // Check if the recipe has already been added
       if (this.state.recipes.map((r) => r.name).includes(recipe.name)) {
@@ -171,47 +162,4 @@ export default class RecipeCollector extends React.Component {
       </Box>
     );
   }
-}
-
-export async function analyzeRecipe(url: string): Promise<RecipeData> {
-  const recipeUrl = encodeURIComponent(url);
-  const response = await fetch(`${apiUrl}/analyze?recipeUrl=${recipeUrl}`);
-
-  if (!response.ok) {
-    throw new Error("Could not analyze the given recipe");
-  }
-
-  return response.json();
-}
-
-export async function saveMealPlan(recipes: RecipeData[]): Promise<MealPlanData> {
-  const response = await fetch(`${apiUrl}/plans`, {
-    body: JSON.stringify({
-      recipes: recipes.map((r) => ({
-        recipeUrl: r.url,
-        servings: r.servings,
-      })),
-    }),
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
-
-  if (!response.ok) {
-    throw new Error("Could not save the given meal plan");
-  }
-
-  return response.json();
-}
-
-export async function showMealPlan(planId: string): Promise<MealPlanData | null> {
-  const response = await fetch(`${apiUrl}/plans/${planId}`);
-
-  if (!response.ok) {
-    return null;
-  }
-
-  return response.json();
 }

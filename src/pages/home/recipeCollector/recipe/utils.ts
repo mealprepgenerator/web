@@ -1,7 +1,7 @@
 import parseFraction from "parse-fraction";
 import wordsToNumbers from "words-to-numbers";
 
-import { NutrientData, RecipeData } from "../Recipe";
+import * as api from "../../../../services/api";
 
 const integerRegex = "[1-9]\\d*";
 const decimalRegex = `${integerRegex}(\\.\\d+)?`;
@@ -58,7 +58,7 @@ export function scaleIngredients(ingredients: string[], multiplier: number): str
   return ingredients.map((ingredient) => scaleNumbers(ingredient, multiplier));
 }
 
-export function scaleNutrients(nutrients: NutrientData, multiplier: number) {
+export function scaleNutrients(nutrients: api.NutrientData, multiplier: number) {
   if (multiplier === 1) {
     return nutrients;
   }
@@ -69,14 +69,14 @@ export function scaleNutrients(nutrients: NutrientData, multiplier: number) {
       key,
       quantity: nutrients[key].quantity * multiplier,
     }))
-    .reduce((newNutrients: NutrientData, nc) => {
+    .reduce((newNutrients: api.NutrientData, nc) => {
       const {key, ...nd} = nc;
       newNutrients[key] = nd;
       return newNutrients;
     }, {});
 }
 
-export function scaleRecipe(recipe: RecipeData, multiplier: number): RecipeData {
+export function scaleRecipe(recipe: api.RecipeData, multiplier: number): api.RecipeData {
   if (multiplier === 1) {
     return recipe;
   }

@@ -2,10 +2,10 @@ import * as React from "react";
 
 import { Column, Columns } from "bloomer";
 
-import { RecipeData } from "./Recipe";
+import * as api from "../../../services/api";
 
 export interface NutritionProps {
-  recipes: RecipeData[];
+  recipes: api.RecipeData[];
 }
 
 const Nutrition: React.SFC<NutritionProps> = ({recipes}) => {

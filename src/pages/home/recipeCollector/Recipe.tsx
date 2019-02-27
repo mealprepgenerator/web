@@ -2,41 +2,17 @@ import * as React from "react";
 
 import { Column, Columns, Delete, Input } from "bloomer";
 
+import * as api from "../../../services/api";
 import { scaleRecipe } from "./recipe/utils";
-
-export interface RecipeData {
-  url: string;
-  name: string;
-  image: string;
-  servings: number;
-  nutrition: NutritionData;
-  ingredients: string[];
-  instructions: string[];
-}
-
-export interface NutritionData {
-  perDaily: NutrientData;
-  perWeight: NutrientData;
-  perCalories: NutrientData;
-  totalWeight: number;
-  totalCalories: number;
-}
-
-export interface NutrientData {
-  [code: string]: {
-    unit: string;
-    quantity: number;
-  };
-}
 
 export interface RecipeActions {
   onChange: (servings: string) => void;
 }
 
 export interface RecipeProps {
-  data: RecipeData;
-  onChange: (recipe: RecipeData) => void;
-  onRemove: (recipe: RecipeData) => void;
+  data: api.RecipeData;
+  onChange: (recipe: api.RecipeData) => void;
+  onRemove: (recipe: api.RecipeData) => void;
 }
 
 export default class Recipe extends React.Component<RecipeProps> {
