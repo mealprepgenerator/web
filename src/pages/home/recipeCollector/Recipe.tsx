@@ -1,6 +1,7 @@
 import * as React from "react";
 
-import "./Recipe.css";
+import { Column, Columns, Delete, Input } from "bloomer";
+
 import { scaleRecipe } from "./recipe/utils";
 
 export interface RecipeData {
@@ -55,17 +56,23 @@ export default class Recipe extends React.Component<RecipeProps> {
     const {name, servings} = this.props.data;
 
     return (
-      <div className="recipe">
-        <input
-          type="number"
-          value={String(servings)}
-          onChange={this.onChange}
-        />
-        <p>{name}</p>
-        <button type="button" onClick={this.onRemove}>
-          Remove Recipe
-        </button>
-      </div>
+      <Columns isVCentered={true} isCentered={true} isMobile={true}>
+        <Column isSize={2}>
+          <Input
+            type="number"
+            value={String(servings)}
+            onChange={this.onChange}
+          />
+        </Column>
+        <Column>
+          <p>{name}</p>
+        </Column>
+        <Column isSize="narrow">
+          <Delete onClick={this.onRemove}>
+            Remove Recipe
+          </Delete>
+        </Column>
+      </Columns>
     );
   }
 }

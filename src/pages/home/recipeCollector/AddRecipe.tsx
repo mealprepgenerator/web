@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import "./AddRecipe.css";
+import { Button, Column, Columns, Input } from "bloomer";
 
 export interface AddRecipeProps {
   onAdd: (recipeUrl: string) => void;
@@ -23,17 +23,20 @@ class AddRecipe extends React.Component<AddRecipeProps, AddRecipeState> {
 
   public render() {
     return (
-      <div className="add-recipe">
-        <input
-          type="text"
-          onChange={this.onChange}
-          placeholder="Enter a valid recipe URL"
-        />
-
-        <button type="button" onClick={this.onClick}>
-          Add Recipe
-        </button>
-      </div>
+      <Columns isMobile={true}>
+        <Column isSize="2/3">
+          <Input
+            type="text"
+            onChange={this.onChange}
+            placeholder="Enter a valid recipe URL"
+          />
+        </Column>
+        <Column>
+          <Button onClick={this.onClick}>
+            Add Recipe
+          </Button>
+        </Column>
+      </Columns>
     );
   }
 }

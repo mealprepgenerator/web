@@ -1,9 +1,19 @@
 import * as React from "react";
 
+import {
+  Box,
+  Button,
+  Column,
+  Columns,
+  Notification,
+} from "bloomer";
+
 import { apiUrl } from "../../config";
 import AddRecipe from "./recipeCollector/AddRecipe";
 import Recipe, { RecipeData } from "./recipeCollector/Recipe";
 import { scaleRecipe } from "./recipeCollector/recipe/utils";
+
+import "./RecipeCollector.css";
 
 export interface MealPlanData {
   id: number;
@@ -127,11 +137,17 @@ export default class RecipeCollector extends React.Component {
     const totalProtein = recipes.map((r) => r.nutrition.perWeight.PROCNT.quantity);
 
     return (
-      <>
-        <p>Total Fat: ({sum(totalFat).toFixed(2)})g</p>
-        <p>Total Carbs: ({sum(totalCarbs).toFixed(2)})g</p>
-        <p>Total Protein: ({sum(totalProtein).toFixed(2)})g</p>
-      </>
+      <Columns isMobile={true}>
+        <Column>
+          <p>Fat: {sum(totalFat).toFixed(2)}g</p>
+        </Column>
+        <Column>
+          <p>Carbs: {sum(totalCarbs).toFixed(2)}g</p>
+        </Column>
+        <Column>
+          <p>Protein: {sum(totalProtein).toFixed(2)}g</p>
+        </Column>
+      </Columns>
     );
   }
 
@@ -155,15 +171,21 @@ export default class RecipeCollector extends React.Component {
     const {error} = this.state;
 
     return (
-      <div className="recipe-collector">
+      <Box className="recipe-collector">
         {error && <p>{error}</p>}
         {this.renderNutrition()}
         {this.renderRecipes()}
         <AddRecipe onAdd={this.onAdd} />
-        <button onClick={this.onSave}>Save</button>
-        <button onClick={this.onCheckout}>Checkout</button>
+        <Columns isMobile={true}>
+          <Column isSize="narrow">
+            <Button onClick={this.onSave}>Save</Button>
+          </Column>
+          <Column isSize="narrow">
+            <Button onClick={this.onCheckout}>Checkout</Button>
+          </Column>
+        </Columns>
         {this.state.savedMealPlan && <p>Meal Plan URL: {this.state.savedMealPlan}</p>}
-      </div>
+      </Box>
     );
   }
 }
