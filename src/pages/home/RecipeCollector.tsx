@@ -107,7 +107,7 @@ export default class RecipeCollector extends React.Component {
 
   public onAdd = async (recipeUrl: string) => {
     if (!recipeUrl) {
-      alert("Please enter a value");
+      alert("Please enter a valid recipe URL");
       return;
     }
 
