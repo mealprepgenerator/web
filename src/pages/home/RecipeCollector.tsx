@@ -5,6 +5,7 @@ import {
   Button,
   Column,
   Columns,
+  Content,
   Delete,
   Notification,
 } from "bloomer";
@@ -20,6 +21,7 @@ import "./RecipeCollector.css";
 
 export interface RecipeCollectorState {
   error: string | null;
+  isLoading: boolean;
   isSaving: boolean;
   recipes: api.RecipeData[];
   savedMealPlan: string | null;
@@ -28,6 +30,7 @@ export interface RecipeCollectorState {
 export default class RecipeCollector extends React.Component {
   public state: RecipeCollectorState = {
     error: null,
+    isLoading: false,
     isSaving: false,
     recipes: [],
     savedMealPlan: null,
@@ -45,14 +48,16 @@ export default class RecipeCollector extends React.Component {
       return history.replaceState({}, "Meal Plan Generator", "/");
     }
 
-    this.setState({
-      recipes: await Promise.all(
-        mealPlan.recipes.map(async (r: any) => {
-          const fullRecipe = await api.analyzeRecipe(r.recipeUrl);
-          return scaleRecipe(fullRecipe, r.servings / fullRecipe.servings);
-        }),
-      ),
-    });
+    this.setState({isLoading: true});
+
+    const recipes = await Promise.all(
+      mealPlan.recipes.map(async (r: any) => {
+        const fullRecipe = await api.analyzeRecipe(r.recipeUrl);
+        return scaleRecipe(fullRecipe, r.servings / fullRecipe.servings);
+      }),
+    );
+
+    this.setState({isLoading: false, recipes});
   }
 
   public onHideNotification = () =>
@@ -168,12 +173,26 @@ export default class RecipeCollector extends React.Component {
     ));
   }
 
+  public renderLoading() {
+    const {isLoading} = this.state;
+    if (!isLoading) {
+      return null;
+    }
+
+    return (
+      <Content>
+        <p>Loading recipes...</p>
+      </Content>
+    );
+  }
+
   public render() {
     const {isSaving, savedMealPlan, recipes} = this.state;
     const noRecipes = recipes.length === 0;
 
     return (
       <Box className="recipe-collector">
+        {this.renderLoading()}
         {this.renderNotification()}
         {this.renderNutrition()}
         {this.renderRecipes()}
