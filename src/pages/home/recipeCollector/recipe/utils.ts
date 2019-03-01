@@ -28,7 +28,9 @@ interface Replacer {
 
 function reduceReplacers(initial: string, replacers: Replacer[]) {
   return replacers.reduce(
-    (acc: string, replacer) => acc.replace(replacer.from, replacer.to),
+    (acc: string, replacer) => {
+      return acc.replace(replacer.from, replacer.to);
+    },
     initial,
   );
 }
@@ -38,16 +40,10 @@ function resolveWords(ingredient: string) {
 }
 
 function scaleNumbers(ingredient: string, multiplier: number) {
-  const matches = resolveWords(ingredient).match(everyNumRegex) || [];
-
-  const replacers = matches
-    .map((match) => parseFraction(match))
-    .map(([numer, denom], index) => ({
-      from: matches[index],
-      to: parseFloat((numer * multiplier / denom).toFixed(3)).toString(),
-    }));
-
-  return reduceReplacers(ingredient, replacers);
+  return resolveWords(ingredient).replace(everyNumRegex, (match) => {
+    const [numer, denom] = parseFraction(match);
+    return parseFloat((numer * multiplier / denom).toFixed(3)).toString();
+  });
 }
 
 export function scaleIngredients(ingredients: string[], multiplier: number): string[] {
