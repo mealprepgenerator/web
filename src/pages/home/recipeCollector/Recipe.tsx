@@ -29,7 +29,7 @@ export default class Recipe extends React.Component<RecipeProps> {
     this.props.onRemove(this.props.data)
 
   public render() {
-    const {name, servings} = this.props.data;
+    const {name, url, servings} = this.props.data;
 
     return (
       <Columns isVCentered={true} isCentered={true} isMobile={true}>
@@ -41,7 +41,7 @@ export default class Recipe extends React.Component<RecipeProps> {
           />
         </Column>
         <Column>
-          <p>{name}</p>
+          <a href={url} target="_blank">{name}</a>
         </Column>
         <Column isSize="narrow">
           <Delete onClick={this.onRemove}>
