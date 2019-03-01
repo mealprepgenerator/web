@@ -109,7 +109,7 @@ export default class RecipeCollector extends React.Component {
 
       this.setState({
         isSaving: false,
-        savedMealPlan: `${apiUrl}/${mealPlan.id}`,
+        savedMealPlan: `${location.protocol}//${location.host}/${mealPlan.id}`,
       });
 
       history.replaceState({}, "Meal Plan Generator", mealPlan.id.toString());
@@ -137,6 +137,19 @@ export default class RecipeCollector extends React.Component {
     } catch (err) {
       this.setState({error: err.message});
     }
+  }
+
+  public renderSavedMealPlan() {
+    const {savedMealPlan} = this.state;
+    if (!savedMealPlan) {
+      return null;
+    }
+
+    return (
+      <Content>
+        Meal Plan URL: <a href={savedMealPlan}>{savedMealPlan}</a>
+      </Content>
+    );
   }
 
   public renderNotification() {
@@ -192,7 +205,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public render() {
-    const {isSaving, savedMealPlan, recipes} = this.state;
+    const {isSaving, recipes} = this.state;
     const noRecipes = recipes.length === 0;
 
     return (
@@ -221,7 +234,7 @@ export default class RecipeCollector extends React.Component {
             </Button>
           </Column>
         </Columns>
-        {savedMealPlan && <p>Meal Plan URL: {savedMealPlan}</p>}
+        {this.renderSavedMealPlan()}
       </Box>
     );
   }
