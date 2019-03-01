@@ -48,16 +48,21 @@ export default class RecipeCollector extends React.Component {
       return history.replaceState({}, "Meal Plan Generator", "/");
     }
 
-    this.setState({isLoading: true});
+    try {
+      this.setState({isLoading: true});
+      const recipes = await Promise.all(
+        mealPlan.recipes.map(async (r: any) => {
+          const fullRecipe = await api.analyzeRecipe(r.recipeUrl);
+          return scaleRecipe(fullRecipe, r.servings / fullRecipe.servings);
+        }),
+      );
 
-    const recipes = await Promise.all(
-      mealPlan.recipes.map(async (r: any) => {
-        const fullRecipe = await api.analyzeRecipe(r.recipeUrl);
-        return scaleRecipe(fullRecipe, r.servings / fullRecipe.servings);
-      }),
-    );
-
-    this.setState({isLoading: false, recipes});
+      this.setState({recipes});
+    } catch (err) {
+      this.setState({error: err.message});
+    } finally {
+      this.setState({isLoading: false});
+    }
   }
 
   public onHideNotification = () =>
