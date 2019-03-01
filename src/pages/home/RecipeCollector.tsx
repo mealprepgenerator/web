@@ -10,7 +10,6 @@ import {
   Notification,
 } from "bloomer";
 
-import { apiUrl } from "../../config";
 import * as api from "../../services/api";
 import AddRecipe from "./recipeCollector/AddRecipe";
 import Nutrition from "./recipeCollector/Nutrition";
