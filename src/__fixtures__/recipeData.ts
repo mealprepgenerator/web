@@ -18,7 +18,7 @@ const recipeData: RecipeData = {
       PROCNT: {
         quantity: 1,
         unit: "kcal",
-      } ,
+      },
     },
     perDaily: {
       CHOCDF: {
@@ -32,7 +32,7 @@ const recipeData: RecipeData = {
       PROCNT: {
         quantity: 1,
         unit: "%",
-      } ,
+      },
     },
     perWeight: {
       CHOCDF: {
@@ -46,7 +46,7 @@ const recipeData: RecipeData = {
       PROCNT: {
         quantity: 1,
         unit: "g",
-      } ,
+      },
     },
     totalCalories: 4321,
     totalWeight: 1234,
