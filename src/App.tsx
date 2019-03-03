@@ -4,8 +4,6 @@ import Home from "./pages/Home";
 
 export default class App extends React.Component {
   public render() {
-    return (
-      <Home />
-    );
+    return <Home />;
   }
 }

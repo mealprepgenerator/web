@@ -8,11 +8,11 @@ export interface NutritionProps {
   recipes: api.RecipeData[];
 }
 
-const Nutrition: React.SFC<NutritionProps> = ({recipes}) => {
+const Nutrition: React.SFC<NutritionProps> = ({ recipes }) => {
   const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
-  const totalFat = recipes.map((r) => r.nutrition.perWeight.FAT.quantity);
-  const totalCarbs = recipes.map((r) => r.nutrition.perWeight.CHOCDF.quantity);
-  const totalProtein = recipes.map((r) => r.nutrition.perWeight.PROCNT.quantity);
+  const totalFat = recipes.map(r => r.nutrition.perWeight.FAT.quantity);
+  const totalCarbs = recipes.map(r => r.nutrition.perWeight.CHOCDF.quantity);
+  const totalProtein = recipes.map(r => r.nutrition.perWeight.PROCNT.quantity);
 
   return (
     <Columns isMobile={true}>

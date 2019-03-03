@@ -7,7 +7,7 @@ import {
   Columns,
   Content,
   Delete,
-  Notification,
+  Notification
 } from "bloomer";
 
 import * as api from "../../services/api";
@@ -32,7 +32,7 @@ export default class RecipeCollector extends React.Component {
     isLoading: false,
     isSaving: false,
     recipes: [],
-    savedMealPlan: null,
+    savedMealPlan: null
   };
 
   public async componentDidMount() {
@@ -48,74 +48,75 @@ export default class RecipeCollector extends React.Component {
     }
 
     try {
-      this.setState({isLoading: true});
+      this.setState({ isLoading: true });
       const recipes = await Promise.all(
         mealPlan.recipes.map(async (r: any) => {
           const fullRecipe = await api.analyzeRecipe(r.recipeUrl);
           return scaleRecipe(fullRecipe, r.servings / fullRecipe.servings);
-        }),
+        })
       );
 
-      this.setState({recipes});
+      this.setState({ recipes });
     } catch (err) {
-      this.setState({error: err.message});
+      this.setState({ error: err.message });
     } finally {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     }
   }
 
-  public onHideNotification = () =>
-    this.setState({ error: null })
+  public onHideNotification = () => this.setState({ error: null });
 
   public onCheckout = () => {
     whisk.queue.push(() => {
       whisk.shoppingList.addProductsToBasket({
-        products: this.state.recipes.map((r) => {
-          return r.ingredients;
-        }).reduce((a, b) => a.concat(b), []),
+        products: this.state.recipes
+          .map(r => {
+            return r.ingredients;
+          })
+          .reduce((a, b) => a.concat(b), [])
       });
     });
-  }
+  };
 
   public onChange = (recipe: api.RecipeData) => {
-    const {recipes} = this.state;
+    const { recipes } = this.state;
 
-    const index = recipes.findIndex((r) => r.name === recipe.name);
+    const index = recipes.findIndex(r => r.name === recipe.name);
     const front = recipes.slice(0, index);
     const back = recipes.slice(index + 1, recipes.length);
 
     this.setState({
-      recipes: front.concat(recipe).concat(back),
+      recipes: front.concat(recipe).concat(back)
     });
-  }
+  };
 
   public onRemove = (recipe: api.RecipeData) => {
-    const {recipes} = this.state;
+    const { recipes } = this.state;
 
-    const index = recipes.findIndex((r) => r.name === recipe.name);
+    const index = recipes.findIndex(r => r.name === recipe.name);
     const front = recipes.slice(0, index);
     const back = recipes.slice(index + 1, recipes.length);
 
     this.setState({
-      recipes: front.concat(back),
+      recipes: front.concat(back)
     });
-  }
+  };
 
   public onSave = async () => {
     try {
-      this.setState({error: null, isSaving: true});
+      this.setState({ error: null, isSaving: true });
       const mealPlan = await api.saveMealPlan(this.state.recipes);
 
       this.setState({
         isSaving: false,
-        savedMealPlan: `${location.protocol}//${location.host}/${mealPlan.id}`,
+        savedMealPlan: `${location.protocol}//${location.host}/${mealPlan.id}`
       });
 
       history.replaceState({}, "Meal Plan Generator", mealPlan.id.toString());
     } catch (err) {
-      this.setState({error: err.message, isSaving: false});
+      this.setState({ error: err.message, isSaving: false });
     }
-  }
+  };
 
   public onAdd = async (recipeUrl: string) => {
     if (!recipeUrl) {
@@ -124,22 +125,22 @@ export default class RecipeCollector extends React.Component {
     }
 
     try {
-      this.setState({error: null});
+      this.setState({ error: null });
       const recipe = await api.analyzeRecipe(recipeUrl);
 
       // Check if the recipe has already been added
-      if (this.state.recipes.map((r) => r.name).includes(recipe.name)) {
+      if (this.state.recipes.map(r => r.name).includes(recipe.name)) {
         return;
       }
 
-      this.setState({recipes: this.state.recipes.concat(recipe)});
+      this.setState({ recipes: this.state.recipes.concat(recipe) });
     } catch (err) {
-      this.setState({error: err.message});
+      this.setState({ error: err.message });
     }
-  }
+  };
 
   public renderSavedMealPlan() {
-    const {savedMealPlan} = this.state;
+    const { savedMealPlan } = this.state;
     if (!savedMealPlan) {
       return null;
     }
@@ -152,7 +153,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public renderNotification() {
-    const {error} = this.state;
+    const { error } = this.state;
     if (!error) {
       return null;
     }
@@ -166,7 +167,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public renderNutrition() {
-    const {recipes} = this.state;
+    const { recipes } = this.state;
     if (!recipes[0]) {
       return null;
     }
@@ -175,7 +176,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public renderRecipes() {
-    const {recipes} = this.state;
+    const { recipes } = this.state;
     if (!recipes[0]) {
       return null;
     }
@@ -191,7 +192,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public renderLoading() {
-    const {isLoading} = this.state;
+    const { isLoading } = this.state;
     if (!isLoading) {
       return null;
     }
@@ -204,7 +205,7 @@ export default class RecipeCollector extends React.Component {
   }
 
   public render() {
-    const {isSaving, recipes} = this.state;
+    const { isSaving, recipes } = this.state;
     const noRecipes = recipes.length === 0;
 
     return (
@@ -225,10 +226,7 @@ export default class RecipeCollector extends React.Component {
             </Button>
           </Column>
           <Column isSize="narrow">
-            <Button
-              onClick={this.onCheckout}
-              disabled={noRecipes}
-            >
+            <Button onClick={this.onCheckout} disabled={noRecipes}>
               Checkout
             </Button>
           </Column>

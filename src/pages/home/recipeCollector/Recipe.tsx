@@ -23,13 +23,13 @@ export default class Recipe extends React.Component<RecipeProps> {
 
     const newRecipe = scaleRecipe(this.props.data, multiplier);
     this.props.onChange(newRecipe);
-  }
+  };
 
   public onRemove = (e: React.MouseEvent<HTMLButtonElement>) =>
-    this.props.onRemove(this.props.data)
+    this.props.onRemove(this.props.data);
 
   public render() {
-    const {name, url, servings} = this.props.data;
+    const { name, url, servings } = this.props.data;
 
     return (
       <Columns isVCentered={true} isCentered={true} isMobile={true}>
@@ -41,12 +41,12 @@ export default class Recipe extends React.Component<RecipeProps> {
           />
         </Column>
         <Column>
-          <a href={url} target="_blank">{name}</a>
+          <a href={url} target="_blank">
+            {name}
+          </a>
         </Column>
         <Column isSize="narrow">
-          <Delete onClick={this.onRemove}>
-            Remove Recipe
-          </Delete>
+          <Delete onClick={this.onRemove}>Remove Recipe</Delete>
         </Column>
       </Columns>
     );

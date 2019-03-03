@@ -14,22 +14,22 @@ export interface AddRecipeState {
 class AddRecipe extends React.Component<AddRecipeProps, AddRecipeState> {
   public state: AddRecipeState = {
     isLoading: false,
-    recipeUrl: "",
+    recipeUrl: ""
   };
 
   public onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    this.setState({recipeUrl: e.target.value})
+    this.setState({ recipeUrl: e.target.value });
 
   public onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     await this.props.onAdd(this.state.recipeUrl);
-    this.setState({isLoading: false, recipeUrl: ""});
-  }
+    this.setState({ isLoading: false, recipeUrl: "" });
+  };
 
   public render() {
     return (
       <Columns isMobile={true} isVCentered={true}>
-        <Column isSize={{ mobile: "1/2", desktop: "2/3"}}>
+        <Column isSize={{ mobile: "1/2", desktop: "2/3" }}>
           <Input
             type="text"
             value={this.state.recipeUrl}

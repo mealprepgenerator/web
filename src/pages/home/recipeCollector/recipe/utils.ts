@@ -9,16 +9,16 @@ const fractionRegex = `(${integerRegex} )?(${integerRegex})\\/(${integerRegex})`
 const everyNumRegex = new RegExp(`(${fractionRegex})|(${decimalRegex})`, "g");
 
 const wordFractions: Replacer[] = [
-  {from: /halfs?/g, to: "1/2"},
-  {from: /thirds?/g, to: "1/3"},
-  {from: /fourths?/g, to: "1/4"},
-  {from: /quarters?/g, to: "1/4"},
-  {from: /fifths?/g, to: "1/5"},
-  {from: /sixths?/g, to: "1/6"},
-  {from: /sevenths?/g, to: "1/7"},
-  {from: /eighths?/g, to: "1/8"},
-  {from: /ninths?/g, to: "1/9"},
-  {from: /tenths?/g, to: "1/10"},
+  { from: /halfs?/g, to: "1/2" },
+  { from: /thirds?/g, to: "1/3" },
+  { from: /fourths?/g, to: "1/4" },
+  { from: /quarters?/g, to: "1/4" },
+  { from: /fifths?/g, to: "1/5" },
+  { from: /sixths?/g, to: "1/6" },
+  { from: /sevenths?/g, to: "1/7" },
+  { from: /eighths?/g, to: "1/8" },
+  { from: /ninths?/g, to: "1/9" },
+  { from: /tenths?/g, to: "1/10" }
 ];
 
 interface Replacer {
@@ -27,12 +27,9 @@ interface Replacer {
 }
 
 function reduceReplacers(initial: string, replacers: Replacer[]) {
-  return replacers.reduce(
-    (acc: string, replacer) => {
-      return acc.replace(replacer.from, replacer.to);
-    },
-    initial,
-  );
+  return replacers.reduce((acc: string, replacer) => {
+    return acc.replace(replacer.from, replacer.to);
+  }, initial);
 }
 
 function resolveWords(ingredient: string) {
@@ -40,39 +37,48 @@ function resolveWords(ingredient: string) {
 }
 
 function scaleNumbers(ingredient: string, multiplier: number) {
-  return resolveWords(ingredient).replace(everyNumRegex, (match) => {
+  return resolveWords(ingredient).replace(everyNumRegex, match => {
     const [numer, denom] = parseFraction(match);
-    return parseFloat((numer * multiplier / denom).toFixed(3)).toString();
+    return parseFloat(((numer * multiplier) / denom).toFixed(3)).toString();
   });
 }
 
-export function scaleIngredients(ingredients: string[], multiplier: number): string[] {
+export function scaleIngredients(
+  ingredients: string[],
+  multiplier: number
+): string[] {
   if (multiplier === 1) {
     return ingredients;
   }
 
-  return ingredients.map((ingredient) => scaleNumbers(ingredient, multiplier));
+  return ingredients.map(ingredient => scaleNumbers(ingredient, multiplier));
 }
 
-export function scaleNutrients(nutrients: api.NutrientData, multiplier: number) {
+export function scaleNutrients(
+  nutrients: api.NutrientData,
+  multiplier: number
+) {
   if (multiplier === 1) {
     return nutrients;
   }
 
   return Object.keys(nutrients)
-    .map((key) => ({
+    .map(key => ({
       ...nutrients[key],
       key,
-      quantity: nutrients[key].quantity * multiplier,
+      quantity: nutrients[key].quantity * multiplier
     }))
     .reduce((newNutrients: api.NutrientData, nc) => {
-      const {key, ...nd} = nc;
+      const { key, ...nd } = nc;
       newNutrients[key] = nd;
       return newNutrients;
     }, {});
 }
 
-export function scaleRecipe(recipe: api.RecipeData, multiplier: number): api.RecipeData {
+export function scaleRecipe(
+  recipe: api.RecipeData,
+  multiplier: number
+): api.RecipeData {
   if (multiplier === 1) {
     return recipe;
   }
@@ -87,8 +93,8 @@ export function scaleRecipe(recipe: api.RecipeData, multiplier: number): api.Rec
       perDaily: scaleNutrients(nutrition.perDaily, multiplier),
       perWeight: scaleNutrients(nutrition.perWeight, multiplier),
       totalCalories: nutrition.totalCalories * multiplier,
-      totalWeight: nutrition.totalWeight * multiplier,
+      totalWeight: nutrition.totalWeight * multiplier
     },
-    servings: recipe.servings * multiplier,
+    servings: recipe.servings * multiplier
   };
 }
