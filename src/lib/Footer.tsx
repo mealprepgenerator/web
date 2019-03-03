@@ -6,7 +6,7 @@ import {
   Container,
   Content,
   Footer as BloomerFooter,
-  Icon,
+  Icon
 } from "bloomer";
 
 const Footer: React.SFC = () => (
@@ -16,14 +16,16 @@ const Footer: React.SFC = () => (
         <Columns>
           <Column isSize="full">
             <p>
-              Made with<Icon hasTextColor="danger" className="fa fa-heart" />
+              Made with
+              <Icon hasTextColor="danger" className="fa fa-heart" />
               by <a href="https://github.com/jankdc">Jan Karlo Dela Cruz</a>
             </p>
           </Column>
         </Columns>
         <Content isSize="small">
           <p>
-            The source code is licensed under <a
+            The source code is licensed under{" "}
+            <a
               href="https://opensource.org/licenses/mit-license.php"
               target="_blank"
             >
@@ -32,13 +34,20 @@ const Footer: React.SFC = () => (
             .
           </p>
           <p>
-            The website content is licensed under <a
+            The website content is licensed under{" "}
+            <a
               href="https://creativecommons.org/licenses/by-nc-sa/4.0"
               target="_blank"
             >
               CC ANS 4.0
             </a>
             .
+          </p>
+          <p>
+            Icons were made by <a href="https://smashicons.com">Smashicons</a>,{" "}
+            <a href="https://pixelbuddha.net">Pixelbuddha</a> and{" "}
+            <a href="https://pixelbuddha.net">Pixelbuddha</a> from{" "}
+            <a href="https://www.flaticon.com">Flat Icon</a>.
           </p>
         </Content>
       </Content>
