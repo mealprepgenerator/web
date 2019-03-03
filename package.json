@@ -45,8 +45,8 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,css}": [
-      "yarn format --write",
-      "yarn lint --fix",
+      "prettier --write",
+      "tslint --fix",
       "git add"
     ]
   }
