@@ -1,6 +1,6 @@
 {
   "name": "mealprepgenerator-web",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
     "@types/jest": "^24.0.0",
