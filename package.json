@@ -24,7 +24,7 @@
     "words-to-numbers": "1.5.1"
   },
   "scripts": {
-    "format": "prettier src/**/*.{ts,tsx} --write",
+    "format": "prettier src/**/*.{ts,tsx,css} --write",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "tslint -p ./tsconfig.json",
