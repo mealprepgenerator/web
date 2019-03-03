@@ -1,7 +1,7 @@
 import { apiUrl } from "../config";
 
 export interface MealPlanData {
-  id: number;
+  id: string;
   recipes: MealPlanRecipe[];
 }
 
