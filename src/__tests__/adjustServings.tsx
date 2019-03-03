@@ -4,7 +4,9 @@ import { StateMock } from "@react-mock/state";
 import * as rtl from "react-testing-library";
 
 import recipeData from "../__fixtures__/recipeData";
-import RecipeCollector, { RecipeCollectorState } from "../pages/home/RecipeCollector";
+import RecipeCollector, {
+  RecipeCollectorState
+} from "../pages/home/RecipeCollector";
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -14,13 +16,13 @@ function renderComponent(state: Partial<RecipeCollectorState>) {
   return rtl.render(
     <StateMock state={state}>
       <RecipeCollector />
-    </StateMock>,
+    </StateMock>
   );
 }
 
 test("Changing the serving up recalculates nutrition correctly", () => {
-  const {getByDisplayValue, getByText} = renderComponent({
-    recipes: [recipeData],
+  const { getByDisplayValue, getByText } = renderComponent({
+    recipes: [recipeData]
   });
 
   const input = getByDisplayValue("2");
@@ -32,8 +34,8 @@ test("Changing the serving up recalculates nutrition correctly", () => {
 });
 
 test("Changing the serving down recalculates nutrition correctly", () => {
-  const {getByDisplayValue, getByText} = renderComponent({
-    recipes: [recipeData],
+  const { getByDisplayValue, getByText } = renderComponent({
+    recipes: [recipeData]
   });
 
   const input = getByDisplayValue("2");

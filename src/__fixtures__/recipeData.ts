@@ -9,50 +9,50 @@ const recipeData: RecipeData = {
     perCalories: {
       CHOCDF: {
         quantity: 1,
-        unit: "kcal",
+        unit: "kcal"
       },
       FAT: {
         quantity: 1,
-        unit: "kcal",
+        unit: "kcal"
       },
       PROCNT: {
         quantity: 1,
-        unit: "kcal",
-      },
+        unit: "kcal"
+      }
     },
     perDaily: {
       CHOCDF: {
         quantity: 1,
-        unit: "%",
+        unit: "%"
       },
       FAT: {
         quantity: 1,
-        unit: "%",
+        unit: "%"
       },
       PROCNT: {
         quantity: 1,
-        unit: "%",
-      },
+        unit: "%"
+      }
     },
     perWeight: {
       CHOCDF: {
         quantity: 1,
-        unit: "g",
+        unit: "g"
       },
       FAT: {
         quantity: 1,
-        unit: "g",
+        unit: "g"
       },
       PROCNT: {
         quantity: 1,
-        unit: "g",
-      },
+        unit: "g"
+      }
     },
     totalCalories: 4321,
-    totalWeight: 1234,
+    totalWeight: 1234
   },
   servings: 2,
-  url: "some-valid-url",
+  url: "some-valid-url"
 };
 
 export default recipeData;

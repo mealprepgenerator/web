@@ -46,19 +46,21 @@ export async function analyzeRecipe(url: string): Promise<RecipeData> {
   return response.json();
 }
 
-export async function saveMealPlan(recipes: RecipeData[]): Promise<MealPlanData> {
+export async function saveMealPlan(
+  recipes: RecipeData[]
+): Promise<MealPlanData> {
   const response = await fetch(`${apiUrl}/plans`, {
     body: JSON.stringify({
-      recipes: recipes.map((r) => ({
+      recipes: recipes.map(r => ({
         recipeUrl: r.url,
-        servings: r.servings,
-      })),
+        servings: r.servings
+      }))
     }),
     headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
+      Accept: "application/json",
+      "Content-Type": "application/json"
     },
-    method: "POST",
+    method: "POST"
   });
 
   if (!response.ok) {
@@ -68,7 +70,9 @@ export async function saveMealPlan(recipes: RecipeData[]): Promise<MealPlanData>
   return response.json();
 }
 
-export async function showMealPlan(planId: string): Promise<MealPlanData | null> {
+export async function showMealPlan(
+  planId: string
+): Promise<MealPlanData | null> {
   const response = await fetch(`${apiUrl}/plans/${planId}`);
 
   if (!response.ok) {

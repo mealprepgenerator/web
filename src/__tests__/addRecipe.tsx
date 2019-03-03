@@ -17,7 +17,7 @@ afterEach(() => {
 test("Adding a recipe without a URL shows a warning", async () => {
   const App = require("../App").default;
 
-  const {getByText} = rtl.render(<App />);
+  const { getByText } = rtl.render(<App />);
 
   rtl.fireEvent.click(getByText("Add Recipe"));
   expect(alertSpy).toHaveBeenCalled();
@@ -27,7 +27,7 @@ test("Adding a recipe with a valid URL gets analyzed", async () => {
   const api = require("../services/api");
   const App = require("../App").default;
 
-  const {getByText, getByPlaceholderText} = rtl.render(<App />);
+  const { getByText, getByPlaceholderText } = rtl.render(<App />);
 
   const input = getByPlaceholderText("Enter a valid recipe URL");
   rtl.fireEvent.change(input, { target: { value: "some-valid-url" } });
@@ -44,7 +44,7 @@ test("Adding a recipe with an invalid URL gets an error", async () => {
 
   api.analyzeRecipe.mockRejectedValueOnce(new Error("some error"));
 
-  const {getByText, getByPlaceholderText} = rtl.render(<App />);
+  const { getByText, getByPlaceholderText } = rtl.render(<App />);
 
   const input = getByPlaceholderText("Enter a valid recipe URL");
   rtl.fireEvent.change(input, { target: { value: "some-invalid-url" } });

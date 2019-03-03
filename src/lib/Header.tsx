@@ -4,9 +4,7 @@ import { Section, Title } from "bloomer";
 
 const Header: React.SFC = () => (
   <Section hasTextAlign="centered">
-    <Title hasTextColor="grey-dark">
-      Meal Prep Generator
-    </Title>
+    <Title hasTextColor="grey-dark">Meal Prep Generator</Title>
   </Section>
 );
 

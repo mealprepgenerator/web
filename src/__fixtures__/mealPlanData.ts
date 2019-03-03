@@ -5,9 +5,9 @@ const mealPlanData: MealPlanData = {
   recipes: [
     {
       recipeUrl: "some-valid-recipe-url",
-      servings: 1,
-    },
-  ],
+      servings: 1
+    }
+  ]
 };
 
 export default mealPlanData;
