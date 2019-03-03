@@ -870,6 +870,11 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
+"@fortawesome/fontawesome-free@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.7.2.tgz#1498c3eb78ee7c78c5488418707de90aaf58d5d7"
+  integrity sha512-Ha4HshKdCVKgu4TVCtG8XyPPYdzTzNW4/fvPnn+LT7AosRABryhlRv4cc4+o84dgpvVJN9reN7jo/c+nYujFug==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -1787,7 +1792,7 @@ binary-extensions@^1.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.12.0.tgz#c2d780f53d45bba8317a8902d4ceeaf3a6385b14"
   integrity sha512-DYWGk01lDcxeS/K9IHPGWfT8PsJmbXRtRd2Sx72Tnb8pcYZQFF1oSDb8hJtS1vhp212q1Rzi5dUf9+nq0o9UIg==
 
-bloomer@0.6.5:
+bloomer@^0.6.5:
   version "0.6.5"
   resolved "https://registry.yarnpkg.com/bloomer/-/bloomer-0.6.5.tgz#678561ac3fba2767916355feb98949dedfd5d66b"
   integrity sha512-BfuWQnOLauMTpx31SWNCxNO0iBGVLkLK+Z2zyRpJrkRpM8WYagtE6C+xRkD4MwR3nlbZn3F2EEkyc0/Kuzhhug==
@@ -2008,7 +2013,7 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
-bulma@0.7.4:
+bulma@^0.7.4:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.7.4.tgz#7e74512e9118d9799021339e67e365ee0ac4f3f9"
   integrity sha512-krG2rP6eAX1WE0sf6O0SC/FUVSOBX4m1PBC2+GKLpb2pX0qanaDqcv9U2nu75egFrsHkI0zdWYuk/oGwoszVWg==
