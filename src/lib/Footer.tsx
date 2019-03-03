@@ -44,10 +44,23 @@ const Footer: React.SFC = () => (
             .
           </p>
           <p>
-            Icons were made by <a href="https://smashicons.com">Smashicons</a>,{" "}
-            <a href="https://pixelbuddha.net">Pixelbuddha</a> and{" "}
-            <a href="https://pixelbuddha.net">Pixelbuddha</a> from{" "}
-            <a href="https://www.flaticon.com">Flat Icon</a>.
+            Icons were made by{" "}
+            <a target="_blank" href="https://smashicons.com">
+              Smashicons
+            </a>
+            ,{" "}
+            <a target="_blank" href="https://creativemarket.com/eucalyp">
+              Eucalyp
+            </a>{" "}
+            and{" "}
+            <a target="_blank" href="https://pixelbuddha.net">
+              Pixelbuddha
+            </a>{" "}
+            from{" "}
+            <a target="_blank" href="https://www.flaticon.com">
+              Flat Icon
+            </a>
+            .
           </p>
         </Content>
       </Content>
