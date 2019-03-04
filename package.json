@@ -1,6 +1,7 @@
 {
   "name": "mealprepgenerator-web",
   "version": "1.2.0",
+  "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
     "@react-mock/state": "^0.1.7",
