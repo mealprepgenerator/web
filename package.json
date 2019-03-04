@@ -1,5 +1,5 @@
 {
-  "name": "mealprepgenerator-web",
+  "name": "@mealprepgenerator/web",
   "version": "1.2.0",
   "license": "MIT",
   "dependencies": {
