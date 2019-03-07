@@ -84,6 +84,11 @@ export default class RecipeCollector extends React.Component {
     }
   }
 
+  public shouldEnableActions = () =>
+    this.state.draftPlan.groups.flatMap(g => {
+      return g.items.map(i => i.url);
+    }).length > 0;
+
   public onHideNotification = () => this.setState({ error: null });
 
   public onCheckout = () => {
@@ -207,8 +212,8 @@ export default class RecipeCollector extends React.Component {
   }
 
   public render() {
-    const { isSaving, draftPlan } = this.state;
-    const noRecipes = draftPlan.groups.length === 0;
+    const { isSaving } = this.state;
+    const disableActions = !this.shouldEnableActions();
 
     return (
       <Box className="recipe-collector">
@@ -219,14 +224,14 @@ export default class RecipeCollector extends React.Component {
           <Column isSize="narrow">
             <Button
               onClick={this.onSave}
-              disabled={noRecipes}
+              disabled={disableActions}
               isLoading={isSaving}
             >
               Save
             </Button>
           </Column>
           <Column isSize="narrow">
-            <Button onClick={this.onCheckout} disabled={noRecipes}>
+            <Button onClick={this.onCheckout} disabled={disableActions}>
               Checkout
             </Button>
           </Column>
