@@ -54,9 +54,9 @@ export default class RecipeCollector extends React.Component {
         return history.replaceState({}, "Meal Plan Generator", "/");
       }
 
-      const dupeRecipes = mealPlan.groups.flatMap(g => {
-        return g.items.map(i => i.recipeUrl);
-      });
+      const dupeRecipes = mealPlan.groups
+        .map(g => g.items.map(i => i.recipeUrl))
+        .reduce((a, b) => a.concat(b), []);
 
       const uniqRecipes = await Promise.all(
         Array.from(new Set(dupeRecipes)).map(async url => {
