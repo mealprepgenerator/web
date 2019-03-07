@@ -127,11 +127,20 @@ export default class MealGroup extends React.Component<MealGroupProps> {
     );
   }
 
+  public renderLabel() {
+    const { showLabel, data } = this.props;
+    if (!showLabel) {
+      return null;
+    }
+
+    return <Subtitle>{data.label}</Subtitle>;
+  }
+
   public render() {
     return (
       <Box>
         {this.renderNutrition()}
-        <Subtitle>{this.props.data.label}</Subtitle>
+        {this.renderLabel()}
         {this.renderRecipes()}
         <AddRecipe onAdd={this.onAdd} />
       </Box>

@@ -252,6 +252,7 @@ export default class RecipeCollector extends React.Component<
           onError={onError}
           onChange={onChange}
           onPreAdd={onPreAdd}
+          showLabel={groups.length > 1}
         />
       );
     });
