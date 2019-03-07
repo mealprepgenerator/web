@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Content } from "bloomer";
+import { Content, Subtitle } from "bloomer";
 
 import * as api from "../../../services/api";
 import Nutrition from "../recipeCollector/Nutrition";
@@ -126,6 +126,7 @@ export default class MealGroup extends React.Component<MealGroupProps> {
     return (
       <>
         {this.renderNutrition()}
+        <Subtitle>{this.props.data.label}</Subtitle>
         {this.renderRecipes()}
         <AddRecipe onAdd={this.onAdd} />
       </>
