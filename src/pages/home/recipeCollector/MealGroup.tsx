@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Content, Subtitle } from "bloomer";
+import { Box, Content, Subtitle } from "bloomer";
 
 import * as api from "../../../services/api";
 import Nutrition from "../recipeCollector/Nutrition";
@@ -16,9 +16,14 @@ export interface MealGroupProps {
   onError?: (error: Error) => void;
   onChange?: (group: api.DraftGroupData) => void;
   onPreAdd?: () => void;
+  showLabel?: boolean;
 }
 
 export default class MealGroup extends React.Component<MealGroupProps> {
+  public static defaultProps: Partial<MealGroupProps> = {
+    showLabel: false
+  };
+
   public state: MealGroupState = {
     isLoading: false
   };
@@ -124,12 +129,12 @@ export default class MealGroup extends React.Component<MealGroupProps> {
 
   public render() {
     return (
-      <>
+      <Box>
         {this.renderNutrition()}
         <Subtitle>{this.props.data.label}</Subtitle>
         {this.renderRecipes()}
         <AddRecipe onAdd={this.onAdd} />
-      </>
+      </Box>
     );
   }
 }

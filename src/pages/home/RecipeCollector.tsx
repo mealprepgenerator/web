@@ -1,10 +1,10 @@
 import * as React from "react";
 
 import {
-  Box,
   Button,
   Column,
   Columns,
+  Container,
   Content,
   Delete,
   Notification
@@ -259,13 +259,13 @@ export default class RecipeCollector extends React.Component<
 
   public render() {
     return (
-      <Box className="recipe-collector">
+      <Container className="recipe-collector">
         {this.renderLoading()}
         {this.renderNotification()}
         {this.renderGroups()}
         {this.renderActions()}
         {this.renderSavedMealPlan()}
-      </Box>
+      </Container>
     );
   }
 }
