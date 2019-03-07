@@ -84,10 +84,10 @@ export default class RecipeCollector extends React.Component {
     }
   }
 
-  public shouldEnableActions = () =>
-    this.state.draftPlan.groups.flatMap(g => {
-      return g.items.map(i => i.url);
-    }).length > 0;
+  public getAllRecipes = () =>
+    this.state.draftPlan.groups
+      .map(g => g.items.map(i => i.url))
+      .reduce((a, b) => a.concat(b), []);
 
   public onHideNotification = () => this.setState({ error: null });
 
@@ -213,7 +213,7 @@ export default class RecipeCollector extends React.Component {
 
   public render() {
     const { isSaving } = this.state;
-    const disableActions = !this.shouldEnableActions();
+    const disableActions = this.getAllRecipes().length === 0;
 
     return (
       <Box className="recipe-collector">
