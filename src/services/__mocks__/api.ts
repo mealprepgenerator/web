@@ -1,7 +1,7 @@
 import mealPlanData from "../../__fixtures__/mealPlanData";
 import recipeData from "../../__fixtures__/recipeData";
 
-import { MealPlanData, RecipeData } from "../api";
+import { DraftPlanData, MealPlanData, RecipeData } from "../api";
 
 exports.analyzeRecipe = jest.fn().mockImplementation(
   async (url: string): Promise<RecipeData> => {
@@ -13,14 +13,8 @@ exports.analyzeRecipe = jest.fn().mockImplementation(
 );
 
 exports.saveMealPlan = jest.fn().mockImplementation(
-  async (recipes: RecipeData[]): Promise<MealPlanData> => {
-    return {
-      ...mealPlanData,
-      recipes: recipes.map(r => ({
-        recipeUrl: r.url,
-        servings: r.servings
-      }))
-    };
+  async (plan: DraftPlanData): Promise<MealPlanData> => {
+    return mealPlanData;
   }
 );
 

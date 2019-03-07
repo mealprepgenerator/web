@@ -3,7 +3,7 @@ import * as React from "react";
 import { StateMock } from "@react-mock/state";
 import * as rtl from "react-testing-library";
 
-import recipeData from "../__fixtures__/recipeData";
+import draftPlanData from "../__fixtures__/draftPlanData";
 import RecipeCollector, {
   RecipeCollectorState
 } from "../pages/home/RecipeCollector";
@@ -22,7 +22,7 @@ function renderComponent(state: Partial<RecipeCollectorState>) {
 
 test("Changing the serving up recalculates nutrition correctly", () => {
   const { getByDisplayValue, getByText } = renderComponent({
-    recipes: [recipeData]
+    draftPlan: draftPlanData
   });
 
   const input = getByDisplayValue("2");
@@ -35,7 +35,7 @@ test("Changing the serving up recalculates nutrition correctly", () => {
 
 test("Changing the serving down recalculates nutrition correctly", () => {
   const { getByDisplayValue, getByText } = renderComponent({
-    recipes: [recipeData]
+    draftPlan: draftPlanData
   });
 
   const input = getByDisplayValue("2");

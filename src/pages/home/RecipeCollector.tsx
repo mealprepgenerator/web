@@ -11,27 +11,32 @@ import {
 } from "bloomer";
 
 import * as api from "../../services/api";
-import AddRecipe from "./recipeCollector/AddRecipe";
-import Nutrition from "./recipeCollector/Nutrition";
-import Recipe from "./recipeCollector/Recipe";
+import MealGroup from "./recipeCollector/MealGroup";
 import { scaleRecipe } from "./recipeCollector/recipe/utils";
 
 import "./RecipeCollector.css";
 
 export interface RecipeCollectorState {
   error: string | null;
-  isLoading: boolean;
   isSaving: boolean;
-  recipes: api.RecipeData[];
+  isLoading: boolean;
+  draftPlan: api.DraftPlanData;
   savedMealPlan: string | null;
 }
 
 export default class RecipeCollector extends React.Component {
   public state: RecipeCollectorState = {
+    draftPlan: {
+      groups: [
+        {
+          items: [],
+          label: "Day 1"
+        }
+      ]
+    },
     error: null,
     isLoading: false,
     isSaving: false,
-    recipes: [],
     savedMealPlan: null
   };
 
@@ -40,23 +45,38 @@ export default class RecipeCollector extends React.Component {
       return history.replaceState({}, "Meal Plan Generator", "/");
     }
 
-    const planId = location.pathname.substring(1);
-    const mealPlan = await api.showMealPlan(planId);
-
-    if (!mealPlan) {
-      return history.replaceState({}, "Meal Plan Generator", "/");
-    }
-
     try {
       this.setState({ isLoading: true });
-      const recipes = await Promise.all(
-        mealPlan.recipes.map(async (r: any) => {
-          const fullRecipe = await api.analyzeRecipe(r.recipeUrl);
-          return scaleRecipe(fullRecipe, r.servings / fullRecipe.servings);
+      const planId = location.pathname.substring(1);
+      const mealPlan = await api.showMealPlan(planId);
+
+      if (!mealPlan) {
+        return history.replaceState({}, "Meal Plan Generator", "/");
+      }
+
+      const dupeRecipes = mealPlan.groups
+        .map(g => g.items.map(i => i.recipeUrl))
+        .reduce((a, b) => a.concat(b), []);
+
+      const uniqRecipes = await Promise.all(
+        Array.from(new Set(dupeRecipes)).map(async url => {
+          return api.analyzeRecipe(url);
         })
       );
 
-      this.setState({ recipes });
+      const recipeMap = uniqRecipes.reduce((a: any, b) => {
+        a[b.url] = b;
+        return a;
+      }, {});
+
+      const draftPlan: api.DraftPlanData = {
+        groups: mealPlan.groups.map(g => ({
+          items: g.items.map(i => recipeMap[i.recipeUrl]),
+          label: g.label
+        }))
+      };
+
+      this.setState({ draftPlan });
     } catch (err) {
       this.setState({ error: err.message });
     } finally {
@@ -64,12 +84,31 @@ export default class RecipeCollector extends React.Component {
     }
   }
 
+  public getAllRecipes = () =>
+    this.state.draftPlan.groups
+      .map(g => g.items.map(i => i.url))
+      .reduce((a, b) => a.concat(b), []);
+
   public onHideNotification = () => this.setState({ error: null });
 
   public onCheckout = () => {
+    const { groups } = this.state.draftPlan;
+    const recipes: { [url: string]: api.RecipeData } = {};
+    for (const g of groups) {
+      for (const i of g.items) {
+        const recipe = recipes[i.url];
+        if (recipe) {
+          const newServings = recipe.servings + i.servings;
+          recipes[i.url] = scaleRecipe(recipe, newServings / recipe.servings);
+        } else {
+          recipes[i.url] = i;
+        }
+      }
+    }
+
     whisk.queue.push(() => {
       whisk.shoppingList.addProductsToBasket({
-        products: this.state.recipes
+        products: Object.values(recipes)
           .map(r => {
             return r.ingredients;
           })
@@ -78,64 +117,34 @@ export default class RecipeCollector extends React.Component {
     });
   };
 
-  public onChange = (recipe: api.RecipeData) => {
-    const { recipes } = this.state;
+  public onChange = (group: api.DraftGroupData, index: number) => {
+    const { draftPlan } = this.state;
+    const groups = draftPlan.groups;
 
-    const index = recipes.findIndex(r => r.name === recipe.name);
-    const front = recipes.slice(0, index);
-    const back = recipes.slice(index + 1, recipes.length);
-
-    this.setState({
-      recipes: front.concat(recipe).concat(back)
-    });
-  };
-
-  public onRemove = (recipe: api.RecipeData) => {
-    const { recipes } = this.state;
-
-    const index = recipes.findIndex(r => r.name === recipe.name);
-    const front = recipes.slice(0, index);
-    const back = recipes.slice(index + 1, recipes.length);
+    const front = groups.slice(0, index);
+    const back = groups.slice(index + 1, groups.length);
 
     this.setState({
-      recipes: front.concat(back)
+      draftPlan: {
+        ...draftPlan,
+        groups: front.concat(group).concat(back)
+      }
     });
   };
 
   public onSave = async () => {
     try {
       this.setState({ error: null, isSaving: true });
-      const mealPlan = await api.saveMealPlan(this.state.recipes);
+      const draftPlan = await api.saveMealPlan(this.state.draftPlan);
 
       this.setState({
         isSaving: false,
-        savedMealPlan: `${location.protocol}//${location.host}/${mealPlan.id}`
+        savedMealPlan: `${location.protocol}//${location.host}/${draftPlan.id}`
       });
 
-      history.replaceState({}, "Meal Plan Generator", mealPlan.id.toString());
+      history.replaceState({}, "Meal Plan Generator", draftPlan.id.toString());
     } catch (err) {
       this.setState({ error: err.message, isSaving: false });
-    }
-  };
-
-  public onAdd = async (recipeUrl: string) => {
-    if (!recipeUrl) {
-      alert("Please enter a valid recipe URL");
-      return;
-    }
-
-    try {
-      this.setState({ error: null });
-      const recipe = await api.analyzeRecipe(recipeUrl);
-
-      // Check if the recipe has already been added
-      if (this.state.recipes.map(r => r.name).includes(recipe.name)) {
-        return;
-      }
-
-      this.setState({ recipes: this.state.recipes.concat(recipe) });
-    } catch (err) {
-      this.setState({ error: err.message });
     }
   };
 
@@ -166,31 +175,6 @@ export default class RecipeCollector extends React.Component {
     );
   }
 
-  public renderNutrition() {
-    const { recipes } = this.state;
-    if (!recipes[0]) {
-      return null;
-    }
-
-    return <Nutrition recipes={recipes} />;
-  }
-
-  public renderRecipes() {
-    const { recipes } = this.state;
-    if (!recipes[0]) {
-      return null;
-    }
-
-    return recipes.map((r, index) => (
-      <Recipe
-        key={index}
-        data={r}
-        onChange={this.onChange}
-        onRemove={this.onRemove}
-      />
-    ));
-  }
-
   public renderLoading() {
     const { isLoading } = this.state;
     if (!isLoading) {
@@ -204,29 +188,50 @@ export default class RecipeCollector extends React.Component {
     );
   }
 
+  public renderGroups() {
+    const { groups } = this.state.draftPlan;
+    if (!groups[0]) {
+      return null;
+    }
+
+    return groups.map((group, index) => {
+      const onPreAdd = () => this.setState({ error: null });
+      const onChange = (g: api.DraftGroupData) => this.onChange(g, index);
+      const onError = (r: Error) => this.setState({ error: r.message });
+
+      return (
+        <MealGroup
+          key={index}
+          data={group}
+          onError={onError}
+          onChange={onChange}
+          onPreAdd={onPreAdd}
+        />
+      );
+    });
+  }
+
   public render() {
-    const { isSaving, recipes } = this.state;
-    const noRecipes = recipes.length === 0;
+    const { isSaving } = this.state;
+    const disableActions = this.getAllRecipes().length === 0;
 
     return (
       <Box className="recipe-collector">
         {this.renderLoading()}
         {this.renderNotification()}
-        {this.renderNutrition()}
-        {this.renderRecipes()}
-        <AddRecipe onAdd={this.onAdd} />
+        {this.renderGroups()}
         <Columns isMobile={true}>
           <Column isSize="narrow">
             <Button
               onClick={this.onSave}
-              disabled={noRecipes}
+              disabled={disableActions}
               isLoading={isSaving}
             >
               Save
             </Button>
           </Column>
           <Column isSize="narrow">
-            <Button onClick={this.onCheckout} disabled={noRecipes}>
+            <Button onClick={this.onCheckout} disabled={disableActions}>
               Checkout
             </Button>
           </Column>
