@@ -102,7 +102,7 @@ export default class RecipeCollector extends React.Component<
         ...this.state.draftPlan,
         groups: groups.concat({
           items: [],
-          label: `Day ${groups.length}`
+          label: `Day ${groups.length + 1}`
         })
       }
     });
