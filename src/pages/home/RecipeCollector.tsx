@@ -59,8 +59,8 @@ export default class RecipeCollector extends React.Component {
       });
 
       const uniqRecipes = await Promise.all(
-        Array.from(new Set(dupeRecipes)).map(async (r: any) => {
-          return api.analyzeRecipe(r.recipeUrl);
+        Array.from(new Set(dupeRecipes)).map(async url => {
+          return api.analyzeRecipe(url);
         })
       );
 
@@ -189,7 +189,21 @@ export default class RecipeCollector extends React.Component {
       return null;
     }
 
-    return groups.map((g, index) => <MealGroup data={g} key={index} />);
+    return groups.map((group, index) => {
+      const onPreAdd = () => this.setState({ error: null });
+      const onChange = (g: api.DraftGroupData) => this.onChange(g, index);
+      const onError = (r: Error) => this.setState({ error: r.message });
+
+      return (
+        <MealGroup
+          key={index}
+          data={group}
+          onError={onError}
+          onChange={onChange}
+          onPreAdd={onPreAdd}
+        />
+      );
+    });
   }
 
   public render() {

@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { Content } from "bloomer";
-import { Container } from "bloomer/lib/layout/Container";
 
 import * as api from "../../../services/api";
 import Nutrition from "../recipeCollector/Nutrition";
@@ -13,8 +12,10 @@ export interface MealGroupState {
 }
 
 export interface MealGroupProps {
-  key?: number;
   data: api.DraftGroupData;
+  onError?: (error: Error) => void;
+  onChange?: (group: api.DraftGroupData) => void;
+  onPreAdd?: () => void;
 }
 
 export default class MealGroup extends React.Component<MealGroupProps> {
@@ -29,9 +30,12 @@ export default class MealGroup extends React.Component<MealGroupProps> {
     const front = items.slice(0, index);
     const back = items.slice(index + 1, items.length);
 
-    this.setState({
-      recipes: front.concat(recipe).concat(back)
-    });
+    if (this.props.onChange) {
+      this.props.onChange({
+        ...this.props.data,
+        items: front.concat(recipe).concat(back)
+      });
+    }
   };
 
   public onRemove = (recipe: api.RecipeData) => {
@@ -41,9 +45,12 @@ export default class MealGroup extends React.Component<MealGroupProps> {
     const front = items.slice(0, index);
     const back = items.slice(index + 1, items.length);
 
-    this.setState({
-      recipes: front.concat(back)
-    });
+    if (this.props.onChange) {
+      this.props.onChange({
+        ...this.props.data,
+        items: front.concat(back)
+      });
+    }
   };
 
   public onAdd = async (recipeUrl: string) => {
@@ -53,7 +60,10 @@ export default class MealGroup extends React.Component<MealGroupProps> {
     }
 
     try {
-      this.setState({ error: null });
+      if (this.props.onPreAdd) {
+        this.props.onPreAdd();
+      }
+
       const recipe = await api.analyzeRecipe(recipeUrl);
 
       // Check if the recipe has already been added
@@ -61,9 +71,16 @@ export default class MealGroup extends React.Component<MealGroupProps> {
         return;
       }
 
-      this.setState({ recipes: this.props.data.items.concat(recipe) });
+      if (this.props.onChange) {
+        this.props.onChange({
+          ...this.props.data,
+          items: this.props.data.items.concat(recipe)
+        });
+      }
     } catch (err) {
-      this.setState({ error: err.message });
+      if (this.props.onError) {
+        this.props.onError(err);
+      }
     }
   };
 
