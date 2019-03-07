@@ -24,7 +24,10 @@ export interface RecipeCollectorState {
   savedMealPlan: string | null;
 }
 
-export default class RecipeCollector extends React.Component {
+export default class RecipeCollector extends React.Component<
+  {},
+  RecipeCollectorState
+> {
   public state: RecipeCollectorState = {
     draftPlan: {
       groups: [
@@ -90,6 +93,20 @@ export default class RecipeCollector extends React.Component {
       .reduce((a, b) => a.concat(b), []);
 
   public onHideNotification = () => this.setState({ error: null });
+
+  public onAddGroup = () => {
+    const { groups } = this.state.draftPlan;
+
+    this.setState({
+      draftPlan: {
+        ...this.state.draftPlan,
+        groups: groups.concat({
+          items: [],
+          label: `Day ${groups.length}`
+        })
+      }
+    });
+  };
 
   public onCheckout = () => {
     const { groups } = this.state.draftPlan;
@@ -193,6 +210,11 @@ export default class RecipeCollector extends React.Component {
         <Column isSize="narrow">
           <Button onClick={this.onCheckout} disabled={disableActions}>
             Checkout
+          </Button>
+        </Column>
+        <Column isSize="narrow">
+          <Button onClick={this.onAddGroup} disabled={disableActions}>
+            New Group
           </Button>
         </Column>
       </Columns>
