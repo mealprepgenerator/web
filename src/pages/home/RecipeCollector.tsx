@@ -175,6 +175,30 @@ export default class RecipeCollector extends React.Component {
     );
   }
 
+  public renderActions() {
+    const { isSaving } = this.state;
+    const disableActions = this.getAllRecipes().length === 0;
+
+    return (
+      <Columns isMobile={true}>
+        <Column isSize="narrow">
+          <Button
+            onClick={this.onSave}
+            disabled={disableActions}
+            isLoading={isSaving}
+          >
+            Save
+          </Button>
+        </Column>
+        <Column isSize="narrow">
+          <Button onClick={this.onCheckout} disabled={disableActions}>
+            Checkout
+          </Button>
+        </Column>
+      </Columns>
+    );
+  }
+
   public renderLoading() {
     const { isLoading } = this.state;
     if (!isLoading) {
@@ -212,30 +236,12 @@ export default class RecipeCollector extends React.Component {
   }
 
   public render() {
-    const { isSaving } = this.state;
-    const disableActions = this.getAllRecipes().length === 0;
-
     return (
       <Box className="recipe-collector">
         {this.renderLoading()}
         {this.renderNotification()}
         {this.renderGroups()}
-        <Columns isMobile={true}>
-          <Column isSize="narrow">
-            <Button
-              onClick={this.onSave}
-              disabled={disableActions}
-              isLoading={isSaving}
-            >
-              Save
-            </Button>
-          </Column>
-          <Column isSize="narrow">
-            <Button onClick={this.onCheckout} disabled={disableActions}>
-              Checkout
-            </Button>
-          </Column>
-        </Columns>
+        {this.renderActions()}
         {this.renderSavedMealPlan()}
       </Box>
     );
