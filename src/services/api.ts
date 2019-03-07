@@ -1,13 +1,29 @@
 import { apiUrl } from "../config";
 
-export interface MealPlanData {
-  id: string;
-  recipes: MealPlanRecipe[];
+export interface DraftPlanData {
+  groups: DraftGroupData[];
 }
 
-export interface MealPlanRecipe {
+export interface DraftGroupData {
+  label: string;
+  items: RecipeData[];
+}
+
+export interface MealPlanData {
+  id: string;
+  groups: MealGroupData[];
+}
+
+export interface MealPlanItem {
+  id: number;
   servings: number;
   recipeUrl: string;
+}
+
+export interface MealGroupData {
+  id: number;
+  label: string;
+  items: MealPlanItem[];
 }
 
 export interface RecipeData {
@@ -46,14 +62,16 @@ export async function analyzeRecipe(url: string): Promise<RecipeData> {
   return response.json();
 }
 
-export async function saveMealPlan(
-  recipes: RecipeData[]
-): Promise<MealPlanData> {
+export async function saveMealPlan(plan: DraftPlanData): Promise<MealPlanData> {
   const response = await fetch(`${apiUrl}/plans`, {
     body: JSON.stringify({
-      recipes: recipes.map(r => ({
-        recipeUrl: r.url,
-        servings: r.servings
+      ...plan,
+      groups: plan.groups.map(g => ({
+        ...g,
+        items: g.items.map(i => ({
+          recipeUrl: i.url,
+          servings: i.servings
+        }))
       }))
     }),
     headers: {
