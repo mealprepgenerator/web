@@ -9,6 +9,7 @@ export interface LabelProps {
 
 class Label extends React.Component<LabelProps> {
   public state = {
+    showColor: false,
     showInput: false,
     value: ""
   };
@@ -32,6 +33,10 @@ class Label extends React.Component<LabelProps> {
     this.setState({ showInput: true });
   };
 
+  public onHover = () => this.setState({ showPencil: true });
+
+  public onLeave = () => this.setState({ showPencil: false });
+
   public onBlur = () => this.setState({ showInput: false });
 
   public renderContent() {
@@ -49,12 +54,20 @@ class Label extends React.Component<LabelProps> {
       );
     }
 
-    return <Subtitle>{value}</Subtitle>;
+    const { showColor } = this.state;
+    return (
+      <Subtitle hasTextColor={showColor ? "info" : "dark"}>{value}</Subtitle>
+    );
   }
 
   public render() {
     return (
-      <div className="editable" onClick={this.onClick}>
+      <div
+        className="editable"
+        onClick={this.onClick}
+        onMouseOver={this.onHover}
+        onMouseLeave={this.onLeave}
+      >
         {this.renderContent()}
       </div>
     );
