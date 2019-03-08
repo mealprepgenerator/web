@@ -48,6 +48,7 @@ class Label extends React.Component<LabelProps> {
           defaultValue={value}
           onBlur={this.onBlur}
           onChange={this.onChange}
+          maxLength={20}
           autoFocus={true}
           onKeyPress={this.onKeyPress}
         />
