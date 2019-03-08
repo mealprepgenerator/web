@@ -1,10 +1,10 @@
 import * as React from "react";
 
 import {
-  Box,
   Button,
   Column,
   Columns,
+  Container,
   Content,
   Delete,
   Notification
@@ -24,7 +24,10 @@ export interface RecipeCollectorState {
   savedMealPlan: string | null;
 }
 
-export default class RecipeCollector extends React.Component {
+export default class RecipeCollector extends React.Component<
+  {},
+  RecipeCollectorState
+> {
   public state: RecipeCollectorState = {
     draftPlan: {
       groups: [
@@ -64,14 +67,20 @@ export default class RecipeCollector extends React.Component {
         })
       );
 
-      const recipeMap = uniqRecipes.reduce((a: any, b) => {
-        a[b.url] = b;
-        return a;
-      }, {});
+      const recipeMap: { [url: string]: api.RecipeData } = uniqRecipes.reduce(
+        (a: any, b) => {
+          a[b.url] = b;
+          return a;
+        },
+        {}
+      );
 
       const draftPlan: api.DraftPlanData = {
         groups: mealPlan.groups.map(g => ({
-          items: g.items.map(i => recipeMap[i.recipeUrl]),
+          items: g.items.map(i => {
+            const fullRecipe = recipeMap[i.recipeUrl];
+            return scaleRecipe(fullRecipe, i.servings / fullRecipe.servings);
+          }),
           label: g.label
         }))
       };
@@ -90,6 +99,20 @@ export default class RecipeCollector extends React.Component {
       .reduce((a, b) => a.concat(b), []);
 
   public onHideNotification = () => this.setState({ error: null });
+
+  public onAddGroup = () => {
+    const { groups } = this.state.draftPlan;
+
+    this.setState({
+      draftPlan: {
+        ...this.state.draftPlan,
+        groups: groups.concat({
+          items: [],
+          label: `Day ${groups.length + 1}`
+        })
+      }
+    });
+  };
 
   public onCheckout = () => {
     const { groups } = this.state.draftPlan;
@@ -175,6 +198,35 @@ export default class RecipeCollector extends React.Component {
     );
   }
 
+  public renderActions() {
+    const { isSaving } = this.state;
+    const disableActions = this.getAllRecipes().length === 0;
+
+    return (
+      <Columns isMobile={true}>
+        <Column isSize="narrow">
+          <Button
+            onClick={this.onSave}
+            disabled={disableActions}
+            isLoading={isSaving}
+          >
+            Save
+          </Button>
+        </Column>
+        <Column isSize="narrow">
+          <Button onClick={this.onCheckout} disabled={disableActions}>
+            Checkout
+          </Button>
+        </Column>
+        <Column isSize="narrow">
+          <Button onClick={this.onAddGroup} disabled={disableActions}>
+            New Group
+          </Button>
+        </Column>
+      </Columns>
+    );
+  }
+
   public renderLoading() {
     const { isLoading } = this.state;
     if (!isLoading) {
@@ -206,38 +258,21 @@ export default class RecipeCollector extends React.Component {
           onError={onError}
           onChange={onChange}
           onPreAdd={onPreAdd}
+          showLabel={groups.length > 1}
         />
       );
     });
   }
 
   public render() {
-    const { isSaving } = this.state;
-    const disableActions = this.getAllRecipes().length === 0;
-
     return (
-      <Box className="recipe-collector">
+      <Container className="recipe-collector">
         {this.renderLoading()}
         {this.renderNotification()}
         {this.renderGroups()}
-        <Columns isMobile={true}>
-          <Column isSize="narrow">
-            <Button
-              onClick={this.onSave}
-              disabled={disableActions}
-              isLoading={isSaving}
-            >
-              Save
-            </Button>
-          </Column>
-          <Column isSize="narrow">
-            <Button onClick={this.onCheckout} disabled={disableActions}>
-              Checkout
-            </Button>
-          </Column>
-        </Columns>
+        {this.renderActions()}
         {this.renderSavedMealPlan()}
-      </Box>
+      </Container>
     );
   }
 }
