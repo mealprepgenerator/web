@@ -75,7 +75,7 @@ class Label extends React.Component<LabelProps, LabelState> {
   public render() {
     return (
       <div
-        className="editable"
+        className="label"
         onClick={this.onClick}
         onMouseOver={this.onHover}
         onMouseLeave={this.onLeave}
