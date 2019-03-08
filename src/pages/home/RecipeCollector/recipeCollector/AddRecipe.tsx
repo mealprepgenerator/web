@@ -28,8 +28,8 @@ class AddRecipe extends React.Component<AddRecipeProps, AddRecipeState> {
 
   public render() {
     return (
-      <Columns isMobile={true} isVCentered={true}>
-        <Column isSize={{ mobile: "1/2", desktop: "2/3" }}>
+      <Columns isVCentered={true}>
+        <Column isSize={{ mobile: "full", desktop: "2/3" }}>
           <Input
             type="text"
             value={this.state.recipeUrl}
@@ -37,7 +37,7 @@ class AddRecipe extends React.Component<AddRecipeProps, AddRecipeState> {
             placeholder="Enter a valid recipe URL"
           />
         </Column>
-        <Column>
+        <Column isSize={{ mobile: "full" }}>
           <Button onClick={this.onClick} isLoading={this.state.isLoading}>
             Add Recipe
           </Button>
