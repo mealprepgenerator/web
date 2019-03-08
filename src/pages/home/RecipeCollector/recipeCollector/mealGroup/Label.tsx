@@ -7,15 +7,25 @@ export interface LabelProps {
   onEdit?(value: string): void;
 }
 
-class Label extends React.Component<LabelProps> {
-  public state = {
-    showColor: false,
-    showInput: false,
-    value: ""
-  };
+export interface LabelState {
+  showColor: boolean;
+  showInput: boolean;
+  value: string;
+}
+
+class Label extends React.Component<LabelProps, LabelState> {
+  constructor(props: LabelProps) {
+    super(props);
+
+    this.state = {
+      showColor: false,
+      showInput: false,
+      value: props.children
+    };
+  }
 
   public onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && this.props.onEdit) {
+    if (e.key === "Enter" && this.props.onEdit && this.state.value) {
       this.props.onEdit(this.state.value);
       this.setState({ showInput: false });
     }
@@ -33,9 +43,9 @@ class Label extends React.Component<LabelProps> {
     this.setState({ showInput: true });
   };
 
-  public onHover = () => this.setState({ showPencil: true });
+  public onHover = () => this.setState({ showColor: true });
 
-  public onLeave = () => this.setState({ showPencil: false });
+  public onLeave = () => this.setState({ showColor: false });
 
   public onBlur = () => this.setState({ showInput: false });
 
@@ -47,6 +57,7 @@ class Label extends React.Component<LabelProps> {
         <Input
           defaultValue={value}
           onBlur={this.onBlur}
+          isColor={this.state.value.length === 0 ? "danger" : undefined}
           onChange={this.onChange}
           maxLength={20}
           autoFocus={true}
