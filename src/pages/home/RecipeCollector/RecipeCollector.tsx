@@ -19,6 +19,7 @@ import "./RecipeCollector.css";
 export interface RecipeCollectorProps {
   data: RecipeCollectorState;
   onSave?(): void;
+  onClose?(index: number): void;
   onError?(error: Error): void;
   onChange?(group: api.DraftGroupData, index: number): void;
   onAddGroup?(): void;
@@ -110,6 +111,7 @@ export default class RecipeCollector extends React.Component<
     }
 
     return groups.map((group, index) => {
+      const onClose = () => this.props.onClose && this.props.onClose(index);
       const onChange = (g: api.DraftGroupData) =>
         this.props.onChange && this.props.onChange(g, index);
 
@@ -118,9 +120,11 @@ export default class RecipeCollector extends React.Component<
           key={index}
           data={group}
           onError={this.props.onError}
+          onClose={onClose}
           onChange={onChange}
           onPreAdd={this.props.onHideNotification}
           showLabel={groups.length > 1}
+          showClose={groups.length > 1}
         />
       );
     });

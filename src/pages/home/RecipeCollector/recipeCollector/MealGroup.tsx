@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Box, Content, Subtitle } from "bloomer";
+import { Box, Button, Column, Columns, Content, Icon, Subtitle } from "bloomer";
 
 import * as api from "../../../../services/api";
 import Nutrition from "../recipeCollector/Nutrition";
@@ -13,14 +13,17 @@ export interface MealGroupState {
 
 export interface MealGroupProps {
   data: api.DraftGroupData;
+  onClose?: () => void;
   onError?: (error: Error) => void;
   onChange?: (group: api.DraftGroupData) => void;
   onPreAdd?: () => void;
   showLabel?: boolean;
+  showClose?: boolean;
 }
 
 export default class MealGroup extends React.Component<MealGroupProps> {
   public static defaultProps: Partial<MealGroupProps> = {
+    showClose: false,
     showLabel: false
   };
 
@@ -136,10 +139,26 @@ export default class MealGroup extends React.Component<MealGroupProps> {
     return <Subtitle>{data.label}</Subtitle>;
   }
 
+  public renderClose() {
+    const { showClose, onClose } = this.props;
+    if (!showClose) {
+      return null;
+    }
+
+    return (
+      <Button isColor="danger" isOutlined={true} onClick={onClose}>
+        <Icon isSize="medium" className="fa fa-times" />
+      </Button>
+    );
+  }
+
   public render() {
     return (
       <Box>
-        {this.renderLabel()}
+        <Columns isMobile={true} isVCentered={true}>
+          <Column isSize="narrow">{this.renderLabel()}</Column>
+          <Column hasTextAlign="right">{this.renderClose()}</Column>
+        </Columns>
         {this.renderNutrition()}
         {this.renderRecipes()}
         <AddRecipe onAdd={this.onAdd} />
