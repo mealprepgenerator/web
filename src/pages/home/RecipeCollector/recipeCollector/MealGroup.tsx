@@ -6,6 +6,7 @@ import * as api from "../../../../services/api";
 import Nutrition from "../recipeCollector/Nutrition";
 import Recipe from "../recipeCollector/Recipe";
 import AddRecipe from "./AddRecipe";
+import Label from "./mealGroup/Label";
 
 export interface MealGroupState {
   isLoading: boolean;
@@ -57,6 +58,15 @@ export default class MealGroup extends React.Component<MealGroupProps> {
       this.props.onChange({
         ...this.props.data,
         items: front.concat(back)
+      });
+    }
+  };
+
+  public onEdit = (label: string) => {
+    if (this.props.onChange) {
+      this.props.onChange({
+        ...this.props.data,
+        label
       });
     }
   };
@@ -136,7 +146,7 @@ export default class MealGroup extends React.Component<MealGroupProps> {
       return null;
     }
 
-    return <Subtitle>{data.label}</Subtitle>;
+    return <Label onEdit={this.onEdit}>{data.label}</Label>;
   }
 
   public renderClose() {
