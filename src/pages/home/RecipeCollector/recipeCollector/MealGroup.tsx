@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Box, Content, Subtitle } from "bloomer";
 
-import * as api from "../../../services/api";
+import * as api from "../../../../services/api";
 import Nutrition from "../recipeCollector/Nutrition";
 import Recipe from "../recipeCollector/Recipe";
 import AddRecipe from "./AddRecipe";

@@ -44,9 +44,13 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx,css}": [
+    "src/**/*.{ts,tsx}": [
       "prettier --write",
       "tslint --fix",
+      "git add"
+    ],
+    "src/**/*.{css}": [
+      "prettier --write",
       "git add"
     ]
   }

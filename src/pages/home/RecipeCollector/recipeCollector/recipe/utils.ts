@@ -1,7 +1,7 @@
 import parseFraction from "parse-fraction";
 import wordsToNumbers from "words-to-numbers";
 
-import * as api from "../../../../services/api";
+import * as api from "../../../../../services/api";
 
 const integerRegex = "[1-9]\\d*";
 const decimalRegex = `${integerRegex}(\\.\\d+)?`;

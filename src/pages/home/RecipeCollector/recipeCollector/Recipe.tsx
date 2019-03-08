@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Column, Columns, Delete, Input } from "bloomer";
 
-import * as api from "../../../services/api";
+import * as api from "../../../../services/api";
 import { scaleRecipe } from "./recipe/utils";
 
 export interface RecipeActions {
