@@ -67,14 +67,20 @@ export default class RecipeCollector extends React.Component<
         })
       );
 
-      const recipeMap = uniqRecipes.reduce((a: any, b) => {
-        a[b.url] = b;
-        return a;
-      }, {});
+      const recipeMap: { [url: string]: api.RecipeData } = uniqRecipes.reduce(
+        (a: any, b) => {
+          a[b.url] = b;
+          return a;
+        },
+        {}
+      );
 
       const draftPlan: api.DraftPlanData = {
         groups: mealPlan.groups.map(g => ({
-          items: g.items.map(i => recipeMap[i.recipeUrl]),
+          items: g.items.map(i => {
+            const fullRecipe = recipeMap[i.recipeUrl];
+            return scaleRecipe(fullRecipe, i.servings / fullRecipe.servings);
+          }),
           label: g.label
         }))
       };
