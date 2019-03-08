@@ -140,6 +140,20 @@ export default class MealGroup extends React.Component<MealGroupProps> {
     );
   }
 
+  public renderHeader() {
+    const { showClose, showLabel } = this.props;
+    if (!showClose && !showLabel) {
+      return null;
+    }
+
+    return (
+      <Columns isMobile={true} isVCentered={true}>
+        <Column isSize="narrow">{this.renderLabel()}</Column>
+        <Column hasTextAlign="right">{this.renderClose()}</Column>
+      </Columns>
+    );
+  }
+
   public renderLabel() {
     const { showLabel, data } = this.props;
     if (!showLabel) {
@@ -165,10 +179,7 @@ export default class MealGroup extends React.Component<MealGroupProps> {
   public render() {
     return (
       <Box>
-        <Columns isMobile={true} isVCentered={true}>
-          <Column isSize="narrow">{this.renderLabel()}</Column>
-          <Column hasTextAlign="right">{this.renderClose()}</Column>
-        </Columns>
+        {this.renderHeader()}
         {this.renderNutrition()}
         {this.renderRecipes()}
         <AddRecipe onAdd={this.onAdd} />
