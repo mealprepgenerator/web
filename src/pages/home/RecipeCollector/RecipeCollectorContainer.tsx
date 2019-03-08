@@ -140,6 +140,24 @@ class RecipeCollectorContainer extends React.Component<
 
   public onError = (error: Error) => this.setState({ error: error.message });
 
+  public onClose = (index: number) => {
+    if (!confirm("Are you sure you want to remove this group?")) {
+      return;
+    }
+
+    const groups = this.state.draftPlan.groups;
+
+    const front = groups.slice(0, index);
+    const back = groups.slice(index + 1, groups.length);
+
+    this.setState({
+      draftPlan: {
+        ...this.state.draftPlan,
+        groups: front.concat(back)
+      }
+    });
+  };
+
   public onSave = async () => {
     try {
       this.setState({ error: null, isSaving: true });
@@ -162,6 +180,7 @@ class RecipeCollectorContainer extends React.Component<
         data={this.state}
         onSave={this.onSave}
         onError={this.onError}
+        onClose={this.onClose}
         onChange={this.onChange}
         onAddGroup={this.onAddGroup}
         onCheckout={this.onCheckout}
