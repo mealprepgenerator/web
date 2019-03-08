@@ -1,20 +1,8 @@
 import * as React from "react";
 
-import {
-  Button,
-  Column,
-  Columns,
-  Container,
-  Content,
-  Delete,
-  Notification
-} from "bloomer";
-
-import * as api from "../../services/api";
-import MealGroup from "./recipeCollector/MealGroup";
+import * as api from "../../../services/api";
+import RecipeCollector from "./RecipeCollector";
 import { scaleRecipe } from "./recipeCollector/recipe/utils";
-
-import "./RecipeCollector.css";
 
 export interface RecipeCollectorState {
   error: string | null;
@@ -24,7 +12,7 @@ export interface RecipeCollectorState {
   savedMealPlan: string | null;
 }
 
-export default class RecipeCollector extends React.Component<
+class RecipeCollectorContainer extends React.Component<
   {},
   RecipeCollectorState
 > {
@@ -93,26 +81,7 @@ export default class RecipeCollector extends React.Component<
     }
   }
 
-  public getAllRecipes = () =>
-    this.state.draftPlan.groups
-      .map(g => g.items.map(i => i.url))
-      .reduce((a, b) => a.concat(b), []);
-
   public onHideNotification = () => this.setState({ error: null });
-
-  public onAddGroup = () => {
-    const { groups } = this.state.draftPlan;
-
-    this.setState({
-      draftPlan: {
-        ...this.state.draftPlan,
-        groups: groups.concat({
-          items: [],
-          label: `Day ${groups.length + 1}`
-        })
-      }
-    });
-  };
 
   public onCheckout = () => {
     const { groups } = this.state.draftPlan;
@@ -140,6 +109,20 @@ export default class RecipeCollector extends React.Component<
     });
   };
 
+  public onAddGroup = () => {
+    const { groups } = this.state.draftPlan;
+
+    this.setState({
+      draftPlan: {
+        ...this.state.draftPlan,
+        groups: groups.concat({
+          items: [],
+          label: `Day ${groups.length + 1}`
+        })
+      }
+    });
+  };
+
   public onChange = (group: api.DraftGroupData, index: number) => {
     const { draftPlan } = this.state;
     const groups = draftPlan.groups;
@@ -154,6 +137,8 @@ export default class RecipeCollector extends React.Component<
       }
     });
   };
+
+  public onError = (error: Error) => this.setState({ error: error.message });
 
   public onSave = async () => {
     try {
@@ -171,108 +156,18 @@ export default class RecipeCollector extends React.Component<
     }
   };
 
-  public renderSavedMealPlan() {
-    const { savedMealPlan } = this.state;
-    if (!savedMealPlan) {
-      return null;
-    }
-
-    return (
-      <Content>
-        Meal Plan URL: <a href={savedMealPlan}>{savedMealPlan}</a>
-      </Content>
-    );
-  }
-
-  public renderNotification() {
-    const { error } = this.state;
-    if (!error) {
-      return null;
-    }
-
-    return (
-      <Notification isColor="danger">
-        <Delete onClick={this.onHideNotification} />
-        {error}
-      </Notification>
-    );
-  }
-
-  public renderActions() {
-    const { isSaving } = this.state;
-    const disableActions = this.getAllRecipes().length === 0;
-
-    return (
-      <Columns isMobile={true}>
-        <Column isSize="narrow">
-          <Button
-            onClick={this.onSave}
-            disabled={disableActions}
-            isLoading={isSaving}
-          >
-            Save
-          </Button>
-        </Column>
-        <Column isSize="narrow">
-          <Button onClick={this.onCheckout} disabled={disableActions}>
-            Checkout
-          </Button>
-        </Column>
-        <Column isSize="narrow">
-          <Button onClick={this.onAddGroup} disabled={disableActions}>
-            New Group
-          </Button>
-        </Column>
-      </Columns>
-    );
-  }
-
-  public renderLoading() {
-    const { isLoading } = this.state;
-    if (!isLoading) {
-      return null;
-    }
-
-    return (
-      <Content>
-        <p>Loading recipes...</p>
-      </Content>
-    );
-  }
-
-  public renderGroups() {
-    const { groups } = this.state.draftPlan;
-    if (!groups[0]) {
-      return null;
-    }
-
-    return groups.map((group, index) => {
-      const onPreAdd = () => this.setState({ error: null });
-      const onChange = (g: api.DraftGroupData) => this.onChange(g, index);
-      const onError = (r: Error) => this.setState({ error: r.message });
-
-      return (
-        <MealGroup
-          key={index}
-          data={group}
-          onError={onError}
-          onChange={onChange}
-          onPreAdd={onPreAdd}
-          showLabel={groups.length > 1}
-        />
-      );
-    });
-  }
-
   public render() {
     return (
-      <Container className="recipe-collector">
-        {this.renderLoading()}
-        {this.renderNotification()}
-        {this.renderGroups()}
-        {this.renderActions()}
-        {this.renderSavedMealPlan()}
-      </Container>
+      <RecipeCollector
+        data={this.state}
+        onSave={this.onSave}
+        onError={this.onError}
+        onChange={this.onChange}
+        onAddGroup={this.onAddGroup}
+        onCheckout={this.onCheckout}
+      />
     );
   }
 }
+
+export default RecipeCollectorContainer;

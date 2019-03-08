@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Column, Columns } from "bloomer";
 
-import * as api from "../../../services/api";
+import * as api from "../../../../services/api";
 
 export interface NutritionProps {
   recipes: api.RecipeData[];
