@@ -67,23 +67,32 @@ export default class RecipeCollector extends React.Component<
     const disableActions = this.getAllRecipes().length === 0;
 
     return (
-      <Columns isMobile={true}>
-        <Column isSize="narrow">
+      <Columns>
+        <Column isSize={{ desktop: "narrow", mobile: "full" }}>
           <Button
             onClick={this.props.onSave}
             disabled={disableActions}
             isLoading={isSaving}
+            isFullWidth={true}
           >
             Save
           </Button>
         </Column>
-        <Column isSize="narrow">
-          <Button onClick={this.props.onCheckout} disabled={disableActions}>
+        <Column isSize={{ desktop: "narrow", mobile: "full" }}>
+          <Button
+            onClick={this.props.onCheckout}
+            disabled={disableActions}
+            isFullWidth={true}
+          >
             Checkout
           </Button>
         </Column>
-        <Column isSize="narrow">
-          <Button onClick={this.props.onAddGroup} disabled={disableActions}>
+        <Column isSize={{ desktop: "narrow", mobile: "full" }}>
+          <Button
+            onClick={this.props.onAddGroup}
+            disabled={disableActions}
+            isFullWidth={true}
+          >
             New Group
           </Button>
         </Column>
