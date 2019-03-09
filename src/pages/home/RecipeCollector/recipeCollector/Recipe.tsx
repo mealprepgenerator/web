@@ -33,7 +33,7 @@ export default class Recipe extends React.Component<RecipeProps> {
 
     return (
       <Columns isVCentered={true} isCentered={true} isMobile={true}>
-        <Column isSize={2}>
+        <Column isSize={{ mobile: 3, tablet: 2 }}>
           <Input
             type="number"
             value={String(servings)}
