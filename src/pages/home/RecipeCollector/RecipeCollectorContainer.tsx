@@ -184,6 +184,7 @@ class RecipeCollectorContainer extends React.Component<
         onChange={this.onChange}
         onAddGroup={this.onAddGroup}
         onCheckout={this.onCheckout}
+        onHideNotification={this.onHideNotification}
       />
     );
   }
