@@ -2,3 +2,7 @@
   margin: 0 auto;
   max-width: 40em;
 }
+
+.recipe-collector-url {
+  word-wrap: break-word;
+}

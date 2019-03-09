@@ -42,9 +42,9 @@ export default class RecipeCollector extends React.Component<
     }
 
     return (
-      <Content>
+      <Container className="recipe-collector-url">
         Meal Plan URL: <a href={savedMealPlan}>{savedMealPlan}</a>
-      </Content>
+      </Container>
     );
   }
 
