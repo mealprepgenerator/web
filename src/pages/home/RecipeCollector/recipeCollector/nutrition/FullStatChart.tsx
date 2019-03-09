@@ -41,7 +41,11 @@ class FullStatChart extends React.Component<FullStatChartProps> {
 
     const diffs = nextProps.data.filter(recipe => {
       const orig = this.props.data.find(r => r.url === recipe.url);
-      return !orig;
+      if (!orig) {
+        return true;
+      }
+
+      return orig.servings !== recipe.servings;
     });
 
     return diffs.length > 0;
