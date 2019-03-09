@@ -10,9 +10,15 @@ import RatioDot from "./nutrition/RatioDot";
 
 export interface NutritionProps {
   recipes: api.RecipeData[];
+  showChart?: boolean;
+  onToggleChart?(): void;
 }
 
-const Nutrition: React.SFC<NutritionProps> = ({ recipes }) => {
+const Nutrition: React.SFC<NutritionProps> = ({
+  recipes,
+  showChart = false,
+  onToggleChart
+}) => {
   const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
   const totalFat = recipes.map(r => r.nutrition.perWeight.FAT.quantity);
   const totalCarbs = recipes.map(r => r.nutrition.perWeight.CHOCDF.quantity);
@@ -26,11 +32,14 @@ const Nutrition: React.SFC<NutritionProps> = ({ recipes }) => {
 
   return (
     <>
-      <FullStatChart data={recipes} />
+      {showChart && <FullStatChart data={recipes} />}
       <Columns isVCentered={true}>
         <Column isSize="narrow" hasTextAlign="right">
-          <Button isOutlined={true}>
-            <Icon isSize="medium" className="fa fa-chart-bar" />
+          <Button isOutlined={true} onClick={onToggleChart}>
+            <Icon
+              isSize="medium"
+              className={`fa fa-${showChart ? "chevron-up" : "chevron-down"}`}
+            />
           </Button>
         </Column>
         <Column>
