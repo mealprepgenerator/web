@@ -1,6 +1,6 @@
 {
   "name": "@mealprepgenerator/web",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
