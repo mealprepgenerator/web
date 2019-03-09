@@ -4,6 +4,7 @@ import { Button, Column, Columns, Icon } from "bloomer";
 
 import * as api from "../../../../services/api";
 
+import FullStatChart from "./nutrition/FullStatChart";
 import RatioChart from "./nutrition/RatioChart";
 import RatioDot from "./nutrition/RatioDot";
 
@@ -25,6 +26,7 @@ const Nutrition: React.SFC<NutritionProps> = ({ recipes }) => {
 
   return (
     <>
+      <FullStatChart data={recipes} />
       <Columns isMobile={true} isVCentered={true}>
         <Column>
           <p>
