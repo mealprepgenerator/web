@@ -4,6 +4,9 @@ import { Column, Columns } from "bloomer";
 
 import * as api from "../../../../services/api";
 
+import RatioChart from "./nutrition/RatioChart";
+import RatioDot from "./nutrition/RatioDot";
+
 export interface NutritionProps {
   recipes: api.RecipeData[];
 }
@@ -14,18 +17,36 @@ const Nutrition: React.SFC<NutritionProps> = ({ recipes }) => {
   const totalCarbs = recipes.map(r => r.nutrition.perWeight.CHOCDF.quantity);
   const totalProtein = recipes.map(r => r.nutrition.perWeight.PROCNT.quantity);
 
+  const chartValues = [
+    { value: sum(totalFat), color: "#2b7489" },
+    { value: sum(totalCarbs), color: "#e34c26" },
+    { value: sum(totalProtein), color: "#563d7c" }
+  ];
+
   return (
-    <Columns isMobile={true}>
-      <Column>
-        <p>Fat: {sum(totalFat).toFixed(2)}g</p>
-      </Column>
-      <Column>
-        <p>Carbs: {sum(totalCarbs).toFixed(2)}g</p>
-      </Column>
-      <Column>
-        <p>Protein: {sum(totalProtein).toFixed(2)}g</p>
-      </Column>
-    </Columns>
+    <>
+      <Columns isMobile={true} isMarginless={true}>
+        <Column>
+          <p>
+            <RatioDot color={chartValues[0].color} />
+            <strong>Fat:</strong> {chartValues[0].value.toFixed(2)}g
+          </p>
+        </Column>
+        <Column>
+          <p>
+            <RatioDot color={chartValues[1].color} />
+            <strong>Carbs:</strong> {chartValues[1].value.toFixed(2)}g
+          </p>
+        </Column>
+        <Column>
+          <p>
+            <RatioDot color={chartValues[2].color} />
+            <strong>Protein:</strong> {chartValues[2].value.toFixed(2)}g
+          </p>
+        </Column>
+      </Columns>
+      <RatioChart data={chartValues} />
+    </>
   );
 };
 
