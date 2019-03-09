@@ -27,7 +27,12 @@ const Nutrition: React.SFC<NutritionProps> = ({ recipes }) => {
   return (
     <>
       <FullStatChart data={recipes} />
-      <Columns isMobile={true} isVCentered={true}>
+      <Columns isVCentered={true}>
+        <Column isSize="narrow" hasTextAlign="right">
+          <Button isOutlined={true}>
+            <Icon isSize="medium" className="fa fa-chart-bar" />
+          </Button>
+        </Column>
         <Column>
           <p>
             <RatioDot color={chartValues[0].color} />
@@ -45,11 +50,6 @@ const Nutrition: React.SFC<NutritionProps> = ({ recipes }) => {
             <RatioDot color={chartValues[2].color} />
             <strong>Protein:</strong> {chartValues[2].value.toFixed(2)}g
           </p>
-        </Column>
-        <Column isSize="narrow" hasTextAlign="right">
-          <Button isOutlined={true}>
-            <Icon isSize="medium" className="fa fa-chart-bar" />
-          </Button>
         </Column>
       </Columns>
       <RatioChart data={chartValues} />
