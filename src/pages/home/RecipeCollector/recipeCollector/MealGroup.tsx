@@ -10,6 +10,7 @@ import Label from "./mealGroup/Label";
 
 export interface MealGroupState {
   isLoading: boolean;
+  showChart: boolean;
 }
 
 export interface MealGroupProps {
@@ -22,15 +23,22 @@ export interface MealGroupProps {
   showClose?: boolean;
 }
 
-export default class MealGroup extends React.Component<MealGroupProps> {
+export default class MealGroup extends React.Component<
+  MealGroupProps,
+  MealGroupState
+> {
   public static defaultProps: Partial<MealGroupProps> = {
     showClose: false,
     showLabel: false
   };
 
   public state: MealGroupState = {
-    isLoading: false
+    isLoading: false,
+    showChart: false
   };
+
+  public onToggleChart = () =>
+    this.setState({ showChart: !this.state.showChart });
 
   public onChange = (recipe: api.RecipeData) => {
     const { items } = this.props.data;
@@ -108,7 +116,13 @@ export default class MealGroup extends React.Component<MealGroupProps> {
       return null;
     }
 
-    return <Nutrition recipes={items} />;
+    return (
+      <Nutrition
+        recipes={items}
+        showChart={this.state.showChart}
+        onToggleChart={this.onToggleChart}
+      />
+    );
   }
 
   public renderRecipes() {

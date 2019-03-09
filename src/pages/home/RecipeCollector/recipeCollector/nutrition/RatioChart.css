@@ -1,0 +1,14 @@
+.ratio-chart {
+  display: flex;
+  font-size: 0;
+  height: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.ratio-chart-value {
+  display: inline-block;
+  height: inherit;
+  border-radius: 1px;
+}
