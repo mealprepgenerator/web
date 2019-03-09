@@ -17,3 +17,9 @@ declare module "@react-mock/state" {
 
   export declare class StateMock extends React.Component<StateMockProps> {}
 }
+
+// TODO: Remove this if we have types for this package
+declare module "@mars/heroku-js-runtime-env" {
+  export = index;
+  declare function index(): any;
+}
