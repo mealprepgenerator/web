@@ -6,10 +6,13 @@
     "@fortawesome/fontawesome-free": "^5.7.2",
     "@mars/heroku-js-runtime-env": "^3.0.2",
     "@react-mock/state": "^0.1.7",
+    "@testing-library/jest-dom": "^5.5.0",
+    "@testing-library/react": "^10.0.3",
     "@types/chart.js": "^2.7.46",
     "@types/jest": "^24.0.0",
     "@types/react": "^16.8.2",
     "@types/react-dom": "^16.8.0",
+    "@types/testing-library__react": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "bloomer": "^0.6.5",
@@ -19,14 +22,13 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-react": "^7.19.0",
     "husky": "^1.3.1",
-    "jest-dom": "^3.0.2",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "lint-staged": "^8.1.5",
     "parse-fraction": "1.1.0",
     "prettier": "^1.16.4",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "react-scripts": "^2.1.3",
-    "react-testing-library": "^5.5.4",
+    "react-scripts": "^3.4.1",
     "typescript": "^3.3.3",
     "words-to-numbers": "^1.5.1"
   },
@@ -34,7 +36,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "eslint 'src/**/*.{ts,tsx,css}' && prettier 'src/**/*.{ts,tsx,css}' --check",
-    "test": "react-scripts test"
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen"
   },
   "browserslist": [
     ">0.2%",
@@ -45,7 +47,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn test --no-watch"
+      "pre-push": "CI=true yarn test --env=jest-environment-jsdom-sixteen"
     }
   },
   "lint-staged": {

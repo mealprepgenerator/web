@@ -32,17 +32,17 @@ class RecipeCollectorContainer extends React.Component<
   };
 
   public async componentDidMount() {
-    if (!/^\/[\w\d_-]{7,14}$/g.test(location.pathname)) {
-      return history.replaceState({}, "Meal Plan Generator", "/");
+    if (!/^\/[\w\d_-]{7,14}$/g.test(window.location.pathname)) {
+      return window.history.replaceState({}, "Meal Plan Generator", "/");
     }
 
     try {
       this.setState({ isLoading: true });
-      const planId = location.pathname.substring(1);
+      const planId = window.location.pathname.substring(1);
       const mealPlan = await api.showMealPlan(planId);
 
       if (!mealPlan) {
-        return history.replaceState({}, "Meal Plan Generator", "/");
+        return window.history.replaceState({}, "Meal Plan Generator", "/");
       }
 
       const dupeRecipes = mealPlan.groups
@@ -141,7 +141,7 @@ class RecipeCollectorContainer extends React.Component<
   public onError = (error: Error) => this.setState({ error: error.message });
 
   public onClose = (index: number) => {
-    if (!confirm("Are you sure you want to remove this group?")) {
+    if (!window.confirm("Are you sure you want to remove this group?")) {
       return;
     }
 
@@ -165,10 +165,14 @@ class RecipeCollectorContainer extends React.Component<
 
       this.setState({
         isSaving: false,
-        savedMealPlan: `${location.protocol}//${location.host}/${draftPlan.id}`
+        savedMealPlan: `${window.location.protocol}//${window.location.host}/${draftPlan.id}`
       });
 
-      history.replaceState({}, "Meal Plan Generator", draftPlan.id.toString());
+      window.history.replaceState(
+        {},
+        "Meal Plan Generator",
+        draftPlan.id.toString()
+      );
     } catch (err) {
       this.setState({ error: err.message, isSaving: false });
     }

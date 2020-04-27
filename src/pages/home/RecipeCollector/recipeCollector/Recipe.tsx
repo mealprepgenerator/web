@@ -41,7 +41,7 @@ export default class Recipe extends React.Component<RecipeProps> {
           />
         </Column>
         <Column>
-          <a href={url} target="_blank">
+          <a href={url} target="_blank" rel="noopener noreferrer">
             {name}
           </a>
         </Column>

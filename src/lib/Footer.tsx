@@ -28,6 +28,7 @@ const Footer: React.SFC = () => (
             <a
               href="https://opensource.org/licenses/mit-license.php"
               target="_blank"
+              rel="noopener noreferrer"
             >
               MIT
             </a>
@@ -38,6 +39,7 @@ const Footer: React.SFC = () => (
             <a
               href="https://creativecommons.org/licenses/by-nc-sa/4.0"
               target="_blank"
+              rel="noopener noreferrer"
             >
               CC ANS 4.0
             </a>
@@ -45,19 +47,35 @@ const Footer: React.SFC = () => (
           </p>
           <p>
             Icons were made by{" "}
-            <a target="_blank" href="https://smashicons.com">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://smashicons.com"
+            >
               Smashicons
             </a>
             ,{" "}
-            <a target="_blank" href="https://creativemarket.com/eucalyp">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://creativemarket.com/eucalyp"
+            >
               Eucalyp
             </a>{" "}
             and{" "}
-            <a target="_blank" href="https://pixelbuddha.net">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://pixelbuddha.net"
+            >
               Pixelbuddha
             </a>{" "}
             from{" "}
-            <a target="_blank" href="https://www.flaticon.com">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.flaticon.com"
+            >
               Flat Icon
             </a>
             .
