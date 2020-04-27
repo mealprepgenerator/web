@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import * as rtl from "react-testing-library";
+import * as rtl from "@testing-library/react";
 
 jest.mock("../services/api");
 
@@ -24,6 +24,7 @@ test("Adding a recipe without a URL shows a warning", async () => {
 });
 
 test("Adding a recipe with a valid URL gets analyzed", async () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const api = require("../services/api");
   const App = require("../App").default;
 
@@ -33,12 +34,13 @@ test("Adding a recipe with a valid URL gets analyzed", async () => {
   rtl.fireEvent.change(input, { target: { value: "some-valid-url" } });
   rtl.fireEvent.click(getByText("Add Recipe"));
 
-  await rtl.waitForElement(() => getByText("some-name"));
+  await rtl.waitFor(() => getByText("some-name"));
 
   expect(api.analyzeRecipe).toHaveBeenCalledWith("some-valid-url");
 });
 
 test("Adding a recipe with an invalid URL gets an error", async () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const api = require("../services/api");
   const App = require("../App").default;
 
@@ -50,5 +52,5 @@ test("Adding a recipe with an invalid URL gets an error", async () => {
   rtl.fireEvent.change(input, { target: { value: "some-invalid-url" } });
   rtl.fireEvent.click(getByText("Add Recipe"));
 
-  await rtl.waitForElement(() => getByText("some error"));
+  await rtl.waitFor(() => getByText("some error"));
 });

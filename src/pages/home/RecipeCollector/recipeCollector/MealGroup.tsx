@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Box, Button, Column, Columns, Content, Icon, Subtitle } from "bloomer";
+import { Box, Button, Column, Columns, Content, Icon } from "bloomer";
 
 import * as api from "../../../../services/api";
 import Nutrition from "../recipeCollector/Nutrition";

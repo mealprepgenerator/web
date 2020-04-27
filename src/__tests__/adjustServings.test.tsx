@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { StateMock } from "@react-mock/state";
-import * as rtl from "react-testing-library";
+import * as rtl from "@testing-library/react";
 
 import draftPlanData from "../__fixtures__/draftPlanData";
 import RecipeCollector, {
